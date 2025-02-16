@@ -40,6 +40,8 @@ yarn-error.*
 # environmental variables 
 GoogleKey.ts
 constants/GoogleKey.ts
+SmartlookKey.ts
+constants/SmartlookKey.ts
 
 # env file
 .env
