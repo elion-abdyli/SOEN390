@@ -7,7 +7,18 @@ type MapMarkerProps = {
 };
 
 const MapMarker: React.FC<MapMarkerProps> = ({ coordinate, title }) => {
-  return <Marker coordinate={coordinate} title={title} />;
+  // Check title to assign specific testID and accessibilityLabel
+  const testID = title.replace(/\s+/g, '') + 'Marker'; // Example: "VA Building" -> "VABuildingMarker"
+  const accessibilityLabel = `${title} Marker`;
+
+  return (
+    <Marker
+      coordinate={coordinate}
+      title={title}
+      testID={testID}
+      accessibilityLabel={accessibilityLabel}
+    />
+  );
 };
 
 export default MapMarker;
