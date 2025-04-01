@@ -351,12 +351,15 @@ const loadAndDisplayGraph = async () => {
       console.log("Failed to load hallways graph.");
     }
   };
-//compareRooms("H820", "H822")
-// sameFloor("H825", "H831").then((path) => {
-//   console.log("Returned Path:", path); 
-// });
-differentFloor("H863", "H968").then((path) => {
-  console.log("Returned Path:", path); //Probably a bug with the files themselves but it rarely returns a path just not the shortest one.
+// compareRooms("H820", "H822")
+sameFloor("H807", "hall8ELEV").then((path) => {
+  console.log("Returned Path:", path); 
 });
+// differentFloor("H863", "H968").then((path) => {
+//   console.log("Returned Path:", path); //Probably a bug with the files themselves but it rarely returns a path just not the shortest one.
+// });
 //loadAndDisplayGraph();
 //npx ts-node services/IndoorDirService.ts
+
+//For disabilities make function that only uses elevators
+//Building-to-room is just building to building (differentBuilding function)
