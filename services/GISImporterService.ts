@@ -48,7 +48,6 @@ export const getBuilding = (id: string): Building =>
 
 function _fullImport()
 {
-  console.log("///////////////////////FULL_LOAD");
   _importBuildingOutlines();
   _importBuildings();
 }

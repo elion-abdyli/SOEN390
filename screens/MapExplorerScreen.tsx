@@ -134,12 +134,11 @@ const MapComponent = ({
     const buildingID = markerData.properties.Building;
     if(buildingID)
     {
-      let newSelectedBuilding: Building = getBuilding(buildingID)
-      if(newSelectedBuilding)
+      const newBuilding: Building = getBuilding(buildingID);
+      if(newBuilding)
       {
-        setSelectedBuilding(newSelectedBuilding);
-        let [key, floor] = Object.entries(newSelectedBuilding.floors)[0];
-        setSelectedFloor(floor);
+        setSelectedBuilding(newBuilding);
+        setSelectedFloor((Object.values(newBuilding.floors)[0]) as Floor);
       }
       else
       {
