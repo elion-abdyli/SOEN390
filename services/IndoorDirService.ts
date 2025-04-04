@@ -1,5 +1,13 @@
+import mb1Rooms from "../gis/mb-1-rooms-pois.json";
+import mb2Rooms from "../gis/mb-2-rooms-pois.json";
+import hall1Rooms from "../gis/hall-1-rooms-pois.json";
+import hall2Rooms from "../gis/hall-2-rooms-pois.json";
 import hall8Rooms from "../gis/hall-8-rooms-pois.json";
 import hall9Rooms from "../gis/hall-9-rooms-pois.json";
+import hall1Hallways from "../gis/hall-1-hallways.json";
+import hall2Hallways from "../gis/hall-2-hallways.json";
+import mb1Hallways from "../gis/mb-1-hallways.json";
+import mb2Hallways from "../gis/mb-2-hallways.json";
 import hall8Hallways from "../gis/hall-8-hallways.json";
 import hall9Hallways from "../gis/hall-9-hallways.json";
 import { FeatureCollection, Feature, MultiLineString } from 'geojson';
@@ -33,23 +41,16 @@ const extractHallways = (data: any, name: string): Hallway => ({
 
 //"DATABASE" VARIABLES THAT HOLD HALLWAYS FOR EACH FLOOR AND ROOMS FOR EACH FLOOR
 const hallwaysList: Hallway[] = [
+    extractHallways(hall1Hallways, "hall-1-hallways"),
+    extractHallways(hall2Hallways, "hall-2-hallways"),
     extractHallways(hall8Hallways, "hall-8-hallways"),
-    extractHallways(hall9Hallways, "hall-9-hallways")
+    extractHallways(hall9Hallways, "hall-9-hallways"),
+    extractHallways(mb1Hallways, "mb-1-hallways"),
+    extractHallways(mb2Hallways, "mb-2-hallways")
 ];
 
-const roomList: Room[] = [...extractRooms(hall8Rooms), ...extractRooms(hall9Rooms)];
+const roomList: Room[] = [...extractRooms(hall1Rooms),...extractRooms(hall2Rooms),...extractRooms(hall8Rooms), ...extractRooms(hall9Rooms),...extractRooms(mb1Rooms),...extractRooms(mb2Rooms)];
 
-//For testing.
-const logHallwaysData = (hallwaysList: Hallway[]) => {
-    hallwaysList.forEach(hallway => {
-        console.log(hallway.name);
-        hallway.hallways.forEach((coords, index) => {
-            console.log(`Hallway ${index + 1}:`, JSON.stringify(coords));
-        });
-    });
-};
-
-// console.log("All Rooms List:", roomList);
 
 //FUNCTION TO MAKE THE HALLWAY GRAPH FOR DJIKSTRA TO WORK, USES HALLWAY DATA.
 export const createHallwayGraph = (hallwayData: FeatureCollection): Record<string, string[]> => {
@@ -68,11 +69,10 @@ export const createHallwayGraph = (hallwayData: FeatureCollection): Record<strin
             const fromKey = JSON.stringify(from);
             const toKey = JSON.stringify(to);
   
-            // Initialize nodes in graph
+            
             if (!graph[fromKey]) graph[fromKey] = [];
             if (!graph[toKey]) graph[toKey] = [];
   
-            // Add the connections (undirected graph)
             graph[fromKey].push(toKey);
             graph[toKey].push(fromKey);
           }
@@ -99,16 +99,15 @@ export const loadHallwaysData = async (buildingName: string, floorNumber: number
 
 //FUNCTION USED TO GET DISTANCE BETWEEN TWO COORDINATE POINTS
 const calculateDistance = (node1: string, node2: string): number => {
-  const [lat1, lon1] = JSON.parse(node1);  // Parse the string back into [lat, lon]
-  const [lat2, lon2] = JSON.parse(node2);  // Parse the string back into [lat, lon]
+  const [lat1, lon1] = JSON.parse(node1);  
+  const [lat2, lon2] = JSON.parse(node2);  
 
   const latDiff = lat2 - lat1;
   const lonDiff = lon2 - lon1;
 
-  return Math.sqrt(latDiff * latDiff + lonDiff * lonDiff); // Euclidean distance
+  return Math.sqrt(latDiff * latDiff + lonDiff * lonDiff); 
 };
 
-//FUNCTION USED TO FIND CLOSEST NODE TO GIVEN POINT USING GRAPH GENERATED FROM JSON FILE
 const findClosestNode = (graph: Graph, target: string): string => {
   let closestNode = "";
   let minDistance = Infinity;
@@ -125,35 +124,33 @@ const findClosestNode = (graph: Graph, target: string): string => {
 };
 
 
-//ALL DJIKSTRA FUNCTION
+
 type Graph = Record<string, string[]>; // Adjacency list
 type Distances = Record<string, number>;
 type PreviousNodes = Record<string, string | null>;
 
+//DIJKSTRA FUNCTION
 export const dijkstra = (
   graph: Graph,
   start: string,
   end: string
 ): string[] => {
-  const closestStartNode = findClosestNode(graph, start); // Find closest start node
-  const closestEndNode = findClosestNode(graph, end); // Find closest end node
-
-  console.log('Closest Start Node:', closestStartNode);
-  console.log('Closest End Node:', closestEndNode);
+  const closestStartNode = findClosestNode(graph, start); 
+  const closestEndNode = findClosestNode(graph, end); 
 
   const distances: Distances = {};
   const previousNodes: PreviousNodes = {};
   const nodes: Set<string> = new Set();
 
-  // Initialize distances and nodes
+
   Object.keys(graph).forEach((node) => {
-    distances[node] = node === closestStartNode ? 0 : Infinity; // Start node distance is 0
-    previousNodes[node] = null; // No previous node initially
+    distances[node] = node === closestStartNode ? 0 : Infinity;
+    previousNodes[node] = null; 
     nodes.add(node);
   });
 
   while (nodes.size > 0) {
-    // Get the node with the smallest distance
+   
     let closestNode = Array.from(nodes).reduce((closest, node) => {
       if (distances[node] < distances[closest]) {
         return node;
@@ -161,26 +158,25 @@ export const dijkstra = (
       return closest;
     });
 
-    // If we reach the end, reconstruct the path
+  
     if (closestNode === closestEndNode) {
       const path: string[] = [];
       let currentNode = closestEndNode;
-      
-      // Reconstruct the path from end to start
+    
       while (previousNodes[currentNode] !== null) {
         path.unshift(currentNode);
-        currentNode = previousNodes[currentNode]!; // Non-null assertion
+        currentNode = previousNodes[currentNode]!;
       }
       
-      path.unshift(closestStartNode); // Add the start node at the beginning of the path
-      return path; // Return the path to the end node directly
+      path.unshift(closestStartNode); 
+      return path; 
     }
 
-    nodes.delete(closestNode); // Remove the closest node from the set
+    nodes.delete(closestNode); 
 
-    // Check all neighbors of the current node
+    
     graph[closestNode].forEach((neighbor) => {
-      const alt = distances[closestNode] + 1; // Assuming uniform distance (1)
+      const alt = distances[closestNode] + 1; 
       if (alt < distances[neighbor]) {
         distances[neighbor] = alt;
         previousNodes[neighbor] = closestNode;
@@ -188,7 +184,7 @@ export const dijkstra = (
     });
   }
 
-  return []; // No path found
+  return []; 
 };
 
 //Used to find building (first letters) and then floor number (first number encountered)
@@ -199,23 +195,28 @@ const splitRoomCode = (roomCode: string): { letters: string; numbers: string } =
 };
 
 // MAIN FUNCTION
-const compareRooms = (room1: string, room2: string) => {
+type PathResult =
+  | string[]  
+  | { path1: string[]; path2: string[] }  // Different floors
+  | { path1: string[]; path2: string[]; path3: string[]; path4: string[] };
+
+const compareRooms = async (room1: string, room2: string, forDisabled: boolean = false): Promise<PathResult> => {
     const { letters: letters1, numbers: numbers1 } = splitRoomCode(room1);
     const { letters: letters2, numbers: numbers2 } = splitRoomCode(room2);
 
     if (letters1 === letters2) {
-        // Check floor only if the buildings are the same
+        // Same building
         if (numbers1[0] === numbers2[0]) {
-            sameFloor(room1, room2); 
+            return sameFloor(room1, room2); 
         } else {
-            differentFloor(room1, room2); // Call function for rooms on different floors
+            return differentFloor(room1, room2, forDisabled);
         }
     } else {
-        differentBuilding();
-        console.log("Rooms are in different buildings.");
-        // Do NOT check the floor if buildings are different
+        // Different buildings
+        return differentBuilding(room1, room2, forDisabled);
     }
 };
+
 
 //FUNCTIONS USED IN MAIN NAV FUNCTIONS
 const getRoomCoordinates = (roomCode: string): number[] | undefined => {
@@ -247,20 +248,16 @@ const extractBuildingFromCode = (roomCode: string): string => {
 
 
 const extractFloorFromCode = (roomCode: string): string => {
-  const match = roomCode.match(/\d+/); // Matches the first number in the room code
+  const match = roomCode.match(/\d+/); 
   if (!match) {
       throw new Error(`Invalid room code format: ${roomCode}`);
   }
-  return match[0][0]; // Return the first digit of the matched number (floor)
+  return match[0][0]; 
 };
 
-// Placeholder functions
 
-const differentBuilding = () => console.log("Different building")
 const sameFloor = async (room1Code: string, room2Code: string): Promise<string[]> => {
-  console.log("Same Floor function executed.");
 
-  // Extract floor information from the room codes
   const building = extractBuildingFromCode(room1Code);
   const floor = extractFloorFromCode(room1Code);
   const room1Coords = getRoomCoordinates(room1Code);
@@ -271,9 +268,6 @@ const sameFloor = async (room1Code: string, room2Code: string): Promise<string[]
       return [];
   }
 
-  console.log(`Room 1 Coordinates: ${JSON.stringify(room1Coords)}`);
-  console.log(`Room 2 Coordinates: ${JSON.stringify(room2Coords)}`);
-
   try {
       const hallwaysGraph = await loadHallwaysData(building, Number(floor));
       if (!hallwaysGraph) {
@@ -282,8 +276,8 @@ const sameFloor = async (room1Code: string, room2Code: string): Promise<string[]
       }
       
       const path = dijkstra(hallwaysGraph, JSON.stringify(room1Coords), JSON.stringify(room2Coords));
-      console.log("Computed Path:", JSON.stringify(path, null, 2));
       return path;
+
   } catch (error) {
       console.error("Error computing path:", error);
       return [];
@@ -291,47 +285,63 @@ const sameFloor = async (room1Code: string, room2Code: string): Promise<string[]
 };
 
 
-const differentFloor = async (room1Code: string, room2Code: string): Promise<{ path1: string[], path2: string[] }> => {
-  console.log("Different Floor function executed.");
+const differentFloor = async (
+  room1Code: string, 
+  room2Code: string, 
+  forDisabled: boolean = false
+): Promise<{ path1: string[], path2: string[] }> => {
 
-  // Extract building and floor information from room1Code
   const building1 = extractBuildingFromCode(room1Code);
   const floor1 = extractFloorFromCode(room1Code);
 
-  // Determine the two possible transition points
   const elevatorCode1 = `${building1}${floor1}ELEV`;
   const escalatorCode1 = `${building1}${floor1}ESCA`;
 
-  // Get coordinates of the room and transition points
   const room1Coords = getRoomCoordinates(room1Code);
   const elevatorCoords1 = getRoomCoordinates(elevatorCode1);
   const escalatorCoords1 = getRoomCoordinates(escalatorCode1);
 
   if (!room1Coords || !elevatorCoords1 || !escalatorCoords1) {
-      console.error("One or more required locations not found in the room list.");
-      return { path1: [], path2: [] };
+    console.error("One or more required locations not found in the room list.");
+    return { path1: [], path2: [] };
   }
 
-  // Calculate distances to determine the closest transition point
-  const distanceToElevator = calculateDistance(JSON.stringify(room1Coords), JSON.stringify(elevatorCoords1));
-  const distanceToEscalator = calculateDistance(JSON.stringify(room1Coords), JSON.stringify(escalatorCoords1));
-  const closestTransition = distanceToElevator < distanceToEscalator ? elevatorCode1 : escalatorCode1;
+  let closestTransition: string;
 
-  console.log(`Closest transition point: ${closestTransition}`);
+  if (forDisabled) {
+    closestTransition = elevatorCode1;
+  } else {
+    const distanceToElevator = calculateDistance(JSON.stringify(room1Coords), JSON.stringify(elevatorCoords1));
+    const distanceToEscalator = calculateDistance(JSON.stringify(room1Coords), JSON.stringify(escalatorCoords1));
+    closestTransition = distanceToElevator < distanceToEscalator ? elevatorCode1 : escalatorCode1;
+  }
 
-  // Compute first path using sameFloor
   const path1 = await sameFloor(room1Code, closestTransition);
 
-  // Extract building and floor information from room2Code
   const building2 = extractBuildingFromCode(room2Code);
   const floor2 = extractFloorFromCode(room2Code);
 
-  // Determine the transition point on the second floor using the same method
-  const secondTransition = closestTransition.includes("ELEV") 
-      ? `${building2}${floor2}ELEV` 
-      : `${building2}${floor2}ESCA`;
+  const preferredTransition = forDisabled 
+    ? `${building2}${floor2}ELEV` 
+    : (closestTransition.includes("ELEV") 
+        ? `${building2}${floor2}ELEV` 
+        : `${building2}${floor2}ESCA`);
 
-  console.log(`Transition point for second floor: ${secondTransition}`);
+  const fallbackTransition = forDisabled 
+    ? `${building2}${floor2}ELEV` 
+    : (closestTransition.includes("ELEV") 
+        ? `${building2}${floor2}ESCA` 
+        : `${building2}${floor2}ELEV`);
+
+  const preferredCoords = getRoomCoordinates(preferredTransition);
+  const fallbackCoords = getRoomCoordinates(fallbackTransition);
+
+  const secondTransition = preferredCoords ? preferredTransition : (fallbackCoords ? fallbackTransition : null);
+
+  if (!secondTransition) {
+    console.error("No valid transition point found on the second floor.");
+    return { path1, path2: [] };
+  }
 
   // Compute second path using sameFloor
   const path2 = await sameFloor(secondTransition, room2Code);
@@ -340,26 +350,102 @@ const differentFloor = async (room1Code: string, room2Code: string): Promise<{ p
 };
 
 
-//Function to test if graph is loaded correctly
 
-const loadAndDisplayGraph = async () => {
-    const hallwaysGraph = await loadHallwaysData("hall", 8); 
-    
-    if (hallwaysGraph) {
-      console.log("Hallways Graph:", JSON.stringify(hallwaysGraph, null, 2));
-    } else {
-      console.log("Failed to load hallways graph.");
+const differentBuilding = async (room1: string, room2: string, forDisabled: boolean): Promise<{ path1: string[], path2: string[], path3: string[], path4: string[] }> => {
+  const { path1, path2 } = await indoorToOutdoor(room1, forDisabled);
+
+  const { path1: path3, path2: path4 } = await outdoorToIndoor(room2, forDisabled);
+
+  return { path1, path2, path3, path4 };
+};
+
+const indoorToOutdoor = async (room1: string, forDisabled: boolean): Promise<{ path1: string[], path2: string[] }> => {
+  const buildingCode = extractBuildingFromCode(room1); 
+  const startFloor = Number(extractFloorFromCode(room1)); 
+
+  let path1: string[] = [];
+  let path2: string[] = [];
+
+  if (startFloor === 1) {
+      path2 = await sameFloor(room1, `${buildingCode}1ENTR`);
+  } else {
+      const { path1: floorPath1, path2: floorPath2 } = await differentFloor(room1, `${buildingCode}1ENTR`, forDisabled);
+      path1 = floorPath1;
+      path2 = floorPath2;
+  }
+
+  return { path1, path2 };
+};
+
+const outdoorToIndoor = async (room2: string, forDisabled: boolean): Promise<{ path1: string[], path2: string[] }> => {
+  const buildingCode = extractBuildingFromCode(room2); // Get building code of destination room
+  const startFloor = Number(extractFloorFromCode(room2)); // Get floor of destination room
+
+  let path1: string[] = [];
+  let path2: string[] = [];
+  const entranceRoom = `${buildingCode}1ENTR`;
+
+  if (startFloor === 1) {
+    path1 = await sameFloor(entranceRoom, room2);
+  } else {
+    const { path1: floorPath1, path2: floorPath2 } = await differentFloor(entranceRoom, room2, forDisabled);
+    path1 = floorPath1;
+    path2 = floorPath2; 
+  }
+
+  return { path1, path2 };
+};
+
+//HELPER FUNCTIONS FOR GEOPOSITION TO ROOM
+const calculateDistanceForGeoposition = (coord1: [number, number], coord2: [number, number]): number => {
+  const latDiff = coord2[0] - coord1[0];
+  const longDiff = coord2[1] - coord1[1];
+  return Math.sqrt(latDiff * latDiff + longDiff * longDiff);
+};
+
+const findClosestRoom = (
+  geoposition: [number, number],
+  roomList: Room[],
+  building: string,
+  floor: number
+): string | null => {
+  let closestRoomCode: string | null = null;
+  let minDistance = Infinity;
+
+  roomList.forEach(room => {
+    const code = room.code;
+    if (!code.startsWith(building)) return;
+
+    const match = code.match(/\d+/);
+    if (!match) return;
+
+    const firstDigit = parseInt(match[0].charAt(0), 10);
+    if (firstDigit !== floor) return;
+
+    const roomCoords = room.coordinates;
+    const distance = calculateDistanceForGeoposition(geoposition, roomCoords);
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestRoomCode = code;
     }
-  };
-// compareRooms("H820", "H822")
-sameFloor("H807", "hall8ELEV").then((path) => {
-  console.log("Returned Path:", path); 
-});
-// differentFloor("H863", "H968").then((path) => {
-//   console.log("Returned Path:", path); //Probably a bug with the files themselves but it rarely returns a path just not the shortest one.
-// });
-//loadAndDisplayGraph();
-//npx ts-node services/IndoorDirService.ts
+  });
 
-//For disabilities make function that only uses elevators
-//Building-to-room is just building to building (differentBuilding function)
+  return closestRoomCode;
+};
+
+const routeToRoom = async (
+  geoposition: [number, number], 
+  floor: number, 
+  building: string, 
+  room: string, 
+  isDisabled: boolean
+): Promise<PathResult> => {
+   const room1 = findClosestRoom(geoposition, roomList, building, floor)
+   const room2 = room;
+   if (room1 && room2) {
+    return compareRooms(room1, room2, isDisabled);
+  } else {
+    return [];
+  }
+}
