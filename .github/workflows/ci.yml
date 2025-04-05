@@ -20,9 +20,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --legacy-peer-deps
 
+      - name: Install Jest 
+        run: yarn add --dev jest
+
       - name: Run Jest Tests with Coverage
-        run: npx test
-        # Using your package.json test script which is properly configured
+        run: yarn jest
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
