@@ -19,12 +19,14 @@ jobs:
         run: rm -rf node_modules yarn.lock
       - name: Install dependencies
         run: yarn install --legacy-peer-deps
+        
       - name: Install Jest globally with Yarn
-        run: yarn add --dev jest@^29.7.0
+        run: yarn add --dev jest
       - name: Install Expo modules
         run: yarn add expo
       - name: Run Jest Tests with Coverage
         run: npx jest --coverage
+        
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
