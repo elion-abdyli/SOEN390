@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --legacy-peer-deps
       - name: Install Jest globally with Yarn
-        run: yarn global add jest@^29.7.0
+        run: yarn add --dev jest@^29.7.0
       - name: Install Expo modules
         run: yarn add expo
       - name: Run Jest Tests with Coverage
