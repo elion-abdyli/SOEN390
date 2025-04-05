@@ -8,7 +8,7 @@
     "coverage": "jest --coverage",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "jest --config jest.config.js"
+    "test": "jest"
   },
   "jest": {
     "preset": "jest-expo",
