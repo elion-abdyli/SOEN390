@@ -21,7 +21,7 @@ jobs:
         run: yarn install --legacy-peer-deps
 
       - name: Run Jest Tests with Coverage
-        run: yarn test
+        run: npx test
         # Using your package.json test script which is properly configured
 
       - name: Upload coverage to Codecov
