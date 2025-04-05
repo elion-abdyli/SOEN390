@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --legacy-peer-deps
       - name: Run Jest Tests with Coverage
-        run: yarn test --coverage
+        run: yarn coverage 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --legacy-peer-deps
       - name: Run Jest Tests with Coverage (Again for Sonar)
-        run: yarn test --coverage
+        run: yarn coverage # Use the 'coverage' script from package.json
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
@@ -55,5 +55,4 @@ jobs:
             -Dsonar.projectKey=MiniCapstone-Project_SOEN390
             -Dsonar.organization=minicapstone-project
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-
 
