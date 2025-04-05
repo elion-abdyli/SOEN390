@@ -1,108 +1,116 @@
 
-import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
-import { Calendar, DateData } from "react-native-calendars";
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import CalendarView from '@/components/CalendarComponents/CalendarView';
+import EventList from '@/components/CalendarComponents/EventList';
+import { getEvents, getTodayString } from '../services/eventService';
+import { EventsType, Event } from '../types/eventTypes';
+import NetInfo from '@react-native-community/netinfo';
 
-type MarkedDates = {
-  [date: string]: {
-    marked?: boolean;
-    dotColor?: string;
-    selected?: boolean;
-    selectedColor?: string;
-  };
-};
-import {Styles} from "@/Styles/CalendarStyles";
+const CalendarScreen: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayString());
+  const [events, setEvents] = useState<EventsType>({});
+  const [selectedDateEvents, setSelectedDateEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [isOffline, setIsOffline] = useState<boolean>(false);
 
-interface CalendarViewProps {
-  events: [{}];
-  selectedDate: string;
-  onDateSelect: (date: string) => void;
-  isLoading?: boolean;
-  error?: Error | null;
-}
+  // Monitor network status
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsOffline(!state.isConnected);
+    });
 
-const CalendarScreen: React.FC<CalendarViewProps> = ({
-  events,
-  selectedDate,
-  onDateSelect,
-  isLoading = false,
-  error = null,
-}) => {
-  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
+    return () => unsubscribe();
+  }, []);
 
-  // Update marked dates when events or selected date changes
+  // Load all events on component mount
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const allEvents = await getEvents();
+      setEvents(allEvents);
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('An unknown error occurred');
+      setError(error);
+      console.error('Failed to fetch events:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Update selected day events when date changes
   useEffect(() => {
     try {
-      const marked: MarkedDates = {};
-
-      // Mark dates that have events
-      Object.keys(events).forEach((date) => {
-        marked[date] = {
-          marked: true,
-          dotColor: "#2E66E7",
-        };
-      });
-
-      // Mark the selected date
-      marked[selectedDate] = {
-        ...marked[selectedDate],
-        selected: true,
-        selectedColor: "#2E66E7",
-      };
-
-      setMarkedDates(marked);
+      const dayEvents = events[selectedDate] || [];
+      setSelectedDateEvents(dayEvents);
     } catch (err) {
-      console.error("Error setting marked dates:", err);
+      console.error('Error updating selected date events:', err);
+      setSelectedDateEvents([]);
     }
-  }, [events, selectedDate]);
+  }, [selectedDate, events]);
 
-  const handleDayPress = (day: DateData): void => {
+  // Handle date selection
+  const handleDateSelect = useCallback((date: string) => {
     try {
-      onDateSelect(day.dateString);
+      setSelectedDate(date);
     } catch (err) {
-      console.error("Error handling day press:", err);
+      console.error('Error selecting date:', err);
     }
-  };
+  }, []);
 
-  if (error) {
-    return (
-      <View style={Styles.errorContainer}>
-        <Text style={Styles.errorText}>
-          Failed to load calendar: {error.message}
-        </Text>
-      </View>
-    );
-  }
+  // Retry loading events
+  const handleRetry = useCallback(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   return (
-    <View style={Styles.container}>
-      {isLoading ? (
-        <View style={Styles.loadingContainer}>
-          <Text>Loading calendar...</Text>
-        </View>
-      ) : (
-        <Calendar
-          onDayPress={handleDayPress}
-          markedDates={markedDates}
-          theme={{
-            calendarBackground: "#ffffff",
-            textSectionTitleColor: "#b6c1cd",
-            selectedDayBackgroundColor: "#2E66E7",
-            selectedDayTextColor: "#ffffff",
-            todayTextColor: "#2E66E7",
-            dayTextColor: "#2d4150",
-            textDisabledColor: "#d9e1e8",
-            dotColor: "#2E66E7",
-            selectedDotColor: "#ffffff",
-            arrowColor: "#2E66E7",
-            monthTextColor: "#2d4150",
-            indicatorColor: "#2E66E7",
-          }}
-          enableSwipeMonths={true}
+    <SafeAreaView style={styles.container}>
+      {/* Calendar section - top half */}
+      <View style={styles.calendarContainer}>
+        <CalendarView 
+          events={events}
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+          isLoading={isLoading && !isOffline}
+          error={isOffline ? new Error('You are offline. Please check your connection.') : error}
         />
-      )}
-    </View>
+      </View>
+
+      {/* Events section - bottom half */}
+      <View style={styles.eventsContainer}>
+        <EventList 
+          date={selectedDate}
+          events={selectedDateEvents}
+          isLoading={isLoading && !isOffline && selectedDate !== getTodayString()}
+          error={isOffline ? new Error('You are offline. Please check your connection.') : error}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
+
+const { height } = Dimensions.get('window');
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  calendarContainer: {
+    height: height * 0.5,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  eventsContainer: {
+    flex: 1,
+  },
+});
 
 export default CalendarScreen;
