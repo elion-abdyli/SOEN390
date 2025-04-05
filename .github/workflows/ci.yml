@@ -24,7 +24,7 @@ jobs:
       - name: Install Expo modules
         run: yarn add expo
       - name: Run Jest Tests with Coverage
-        run: jest --coverage
+        run: npx jest --coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
