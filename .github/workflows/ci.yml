@@ -21,11 +21,11 @@ jobs:
         run: yarn install --legacy-peer-deps
         
       - name: Install Jest globally with Yarn
-        run: yarn add --dev jest
+        run: npm install -g jest  # Install Jest globally
       - name: Install Expo modules
         run: yarn add expo
       - name: Run Jest Tests with Coverage
-        run: npx jest --coverage
+        run: jest --coverage
         
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
