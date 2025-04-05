@@ -1,12 +1,20 @@
-// components/CalendarView.tsx
+
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Calendar, DateData, MarkedDates } from "react-native-calendars";
-import { EventsType } from "../types/eventTypes";
-import Styles from "@Styles/CalendarStyles";
+import { View, Text } from "react-native";
+import { Calendar, DateData } from "react-native-calendars";
+
+type MarkedDates = {
+  [date: string]: {
+    marked?: boolean;
+    dotColor?: string;
+    selected?: boolean;
+    selectedColor?: string;
+  };
+};
+import {Styles} from "@/Styles/CalendarStyles";
 
 interface CalendarViewProps {
-  events: EventsType;
+  events: [{}];
   selectedDate: string;
   onDateSelect: (date: string) => void;
   isLoading?: boolean;
