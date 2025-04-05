@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
 
 
 export const Styles = StyleSheet.create({
@@ -143,5 +144,23 @@ export const toggleStyles = StyleSheet.create({
   activeToggleText: {
     color: '#ffffff',
     fontWeight: '600',
+  },
+});
+
+
+const { height } = Dimensions.get('window');
+export const CalendarScreemStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  calendarContainer: {
+    height: height * 0.5,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  eventsContainer: {
+    flex: 1,
   },
 });
