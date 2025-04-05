@@ -5,9 +5,10 @@
   "scripts": {
     "start": "expo start",
     "android": "GRADLE_OPTS='-Xmx4096m -XX:MaxMetaspaceSize=1024m' expo run:android",
+    "coverage": "jest --coverage",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "jest --config jest.config.js"
+    "test": "jest"
   },
   "overrides": {
     "@testing-library/react-hooks": {
@@ -113,4 +114,4 @@
       "dtrace-provider"
     ]
   }
-}
+}}
