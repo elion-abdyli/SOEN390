@@ -13,18 +13,18 @@ import CustomButton from "../components/InputComponents/Buttons";
 import { DirectionsScreenStyles } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SGW_CAMPUS } from "./MapExplorerScreen";
+import  SGW_CAMPUS  from "./MapExplorerScreen";
 import "react-native-get-random-values";
 import { useRoute } from "@react-navigation/native";
-import { retrieveRoutes } from "@/services/DirectionService.ts";
-import { findNextShuttle } from "@/services/ShuttleService.ts";
+import { retrieveRoutes } from "@/services/DirectionService";
+import { findNextShuttle } from "@/services/ShuttleService";
 import { TouchableOpacity } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
 import { getTripDuration } from "@/services/DurationService";
 
-const googleMapsKey = GOOGLE_MAPS_API_KEY;
+// const googleMapsKey = GOOGLE_MAPS_API_KEY;
 const BASE_PADDING = 50;
 
 export default function DirectionsScreen() {
