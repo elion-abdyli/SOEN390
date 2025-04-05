@@ -15,6 +15,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "components/InputComponents/**/*.{js,jsx,ts,tsx}",
+      "components/CalendarComponents/**/*.{js,jsx,ts,tsx}",
       "components/MapComponents/**/*.{js,jsx,ts,tsx}",
       "screens/**/*.{js,jsx,ts,tsx}",
       "services/**/*.{js,jsx,ts,tsx}",
