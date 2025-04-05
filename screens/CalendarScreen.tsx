@@ -21,7 +21,7 @@ interface CalendarViewProps {
   error?: Error | null;
 }
 
-const CalendarView: React.FC<CalendarViewProps> = ({
+const CalendarScreen: React.FC<CalendarViewProps> = ({
   events,
   selectedDate,
   onDateSelect,
@@ -105,4 +105,4 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   );
 };
 
-export default CalendarView;
+export default CalendarScreen;
