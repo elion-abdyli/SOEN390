@@ -14,3 +14,4 @@ Subject ID,Test Area,Task Description,Time Taken,Success (Y/N),Errors Encountere
 1,Metrics to Track,Time Taken (mins):,2 minutes 19 seconds,,,
 1,Metrics to Track,Success Rate: (Y/N),,83%,,
 1,Metrics to Track,Errors Encountered:,,,None,
+1,Metrics to Track,Satisfaction Rating (1-5):,,,,5
