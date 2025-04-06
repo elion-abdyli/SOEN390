@@ -1,29 +1,12 @@
 import { PlacesAPIError } from "@/errors/PlacesAPIError";
 import { FeatureCollection, Feature, Point, Geometry, GeoJsonProperties } from "geojson";
-
-interface PlaceResult {
-  geometry?: {
-    location?: {
-      lat: number;
-      lng: number;
-    };
-  };
-  latitude?: number;
-  longitude?: number;
-  name?: string;
-  formatted_address?: string;
-  vicinity?: string;
-  place_id?: string;
-  types?: string[];
-  rating?: number;
-  price_level?: number;
-  status?: string;
-}
-
-const MIN_RADIUS = 500;
-const MAX_RADIUS = 10000;
-const GENERIC_POI_TYPES = ['coffee', 'cafe', 'restaurant', 'food', 'shop', 'store', 'bar'];
-const DEFAULT_POI_TYPE = 'restaurant';
+import { 
+  GENERIC_POI_TYPES,
+  DEFAULT_POI_TYPE,
+  MAX_RADIUS,
+  MIN_RADIUS,
+} from "@/constants/PlacesServices" ;
+import { PlaceResult } from "@/types/PlacesService" ; 
 
 const buildSearchUrl = (
   searchText: string,
