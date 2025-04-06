@@ -28,7 +28,7 @@ jobs:
       - name: Install Jest globally 
         run: npm install -g jest  # Install Jest globally
       - name: Run Jest Tests with Coverage (Again for Sonar)
-        run: npx jest --coverage
+        run: npx jest --config jest.config.js --coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
