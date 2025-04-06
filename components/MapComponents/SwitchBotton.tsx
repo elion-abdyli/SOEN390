@@ -1,3 +1,4 @@
+import { styles } from '@/Styles/SwitchBottonStyles';
 import { SwitchButtonsProps } from '@/types/MapComponentTypes';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -16,19 +17,5 @@ const SwitchButtons: React.FC<SwitchButtonsProps> = ({ onSwitchToSGW, onSwitchTo
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    backgroundColor: '#722F37',
-    alignItems: 'center',
-    paddingVertical: 0.5,
-    borderRadius: 10,
-    marginHorizontal: 5,
-  },
-});
 
 export default SwitchButtons;
