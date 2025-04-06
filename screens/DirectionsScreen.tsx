@@ -29,7 +29,6 @@ export default function DirectionsScreen() {
   const mapRef = useRef<MapView | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
-  const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -260,17 +259,17 @@ export default function DirectionsScreen() {
     traceRoute();
   }, [transportMode]);
 
-  const setWalking = () => {
-    setTransportMode("WALKING");
-  };
+  // const setWalking = () => {
+  //   setTransportMode("WALKING");
+  // };
 
-  const setDriving = () => {
-    setTransportMode("DRIVING");
-  };
+  // const setDriving = () => {
+  //   setTransportMode("DRIVING");
+  // };
 
-  const setTransit = () => {
-    setTransportMode("TRANSIT");
-  };
+  // const setTransit = () => {
+  //   setTransportMode("TRANSIT");
+  // };
 
   useEffect(() => {
     if (destination) {
@@ -282,7 +281,6 @@ export default function DirectionsScreen() {
 
   useEffect(() => {
     if (directionsRoute) {
-      //console.log("Route distance and duration:", distance, "m", duration, "min");
       console.log("Beginning Direction Rendering"); // proof that state changed and rendering should begin, if not it is an API or rendering issue
     }
   }, [directionsRoute]);

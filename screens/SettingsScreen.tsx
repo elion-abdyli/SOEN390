@@ -16,8 +16,6 @@ export default function SettingsScreen() {
     if (status !== 'granted') {
       return;
     }
-
-    let location = await Location.getCurrentPositionAsync({});
   };
 
   return (
