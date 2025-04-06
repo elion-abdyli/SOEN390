@@ -31,5 +31,8 @@
         <data android:scheme="exp+potato"/>
       </intent-filter>
     </activity>
+    <meta-data
+ android:name="com.google.android.geo.API_KEY" 
+ android:value="AIzaSyCvhMP0gPi5-BbQRCVCrk8h3Qzc4P8-3TU"/>
   </application>
 </manifest>
