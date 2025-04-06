@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import * as Location from 'expo-location';
 import AuthUser from '@/components/CalendarComponents/authUser';
 

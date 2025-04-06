@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, View, Text, Dimensions } from "react-native";
+import { View, Text , TouchableOpacity} from "react-native";
 import MapView, {
   PROVIDER_GOOGLE,
   Marker,
-  Region,
   LatLng,
   Callout,
 } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import CustomButton from "../components/InputComponents/Buttons";
 import { DirectionsScreenStyles } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,7 +16,7 @@ import "react-native-get-random-values";
 import { useRoute } from "@react-navigation/native";
 import { retrieveRoutes } from "@/services/DirectionService";
 import { findNextShuttle } from "@/services/ShuttleService";
-import { TouchableOpacity } from "react-native";
+import {  } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 

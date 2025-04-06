@@ -18,7 +18,7 @@ export const CustomMarkersComponent: React.FC<CustomMarkersProps> = ({
           <Marker
             key={item.id ? `marker-${item.id}` : `marker-${index}`}
             coordinate={{ latitude, longitude }}
-            title={item.BuildingName || item.name}
+            title={item.BuildingName ?? item.name}
             pinColor={item.BuildingName ? "#4A90E2" : "#FF5733"}
             onPress={() => handleMarkerPress(item)}
           />

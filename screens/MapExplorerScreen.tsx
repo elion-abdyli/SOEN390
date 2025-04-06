@@ -4,11 +4,10 @@ import { View, Alert, ScrollView, Dimensions, Text, Modal, TouchableOpacity } fr
 import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker } from "react-native-maps";
 
 import { DefaultMapStyle } from "@/Styles/MapStyles";
-import { CustomMarkersComponent } from "../components/MapComponents/MarkersComponent";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
-import { Button, List } from "react-native-paper";
+import { Button } from "react-native-paper";
 import * as Location from "expo-location";
 import { ButtonsStyles } from "@/Styles/ButtonStyles";
 import {
