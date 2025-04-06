@@ -1,6 +1,4 @@
 import { PlacesAPIError } from "@/errors/PlacesAPIError";
-import { LatLng } from "react-native-maps";
-import { PlaceResult, SearchPlacesResponse } from "@/types/PlacesTypes";
 
 export const searchPlaces = async (
   searchText: string,
@@ -55,11 +53,11 @@ export const searchPlaces = async (
 
     const json = await response.json();
 
-    if (!json || !json.results || !Array.isArray(json.results)) {
+    if (!json ?? !json.results ?? !Array.isArray(json.results)) {
       throw new PlacesAPIError("Invalid API response structure");
     }
 
-    if (json.results.length === 0 || json.status === "ZERO_RESULTS") {
+    if (json.results.length === 0 ?? json.status === "ZERO_RESULTS") {
       return { type: "FeatureCollection", features: [] }; // No POIs found
     }
 
@@ -86,18 +84,18 @@ export const searchPlaces = async (
         },
         properties: {
           name: item.name,
-          formatted_address: item.formatted_address || item.vicinity || "No address available",
+          formatted_address: item.formatted_address ?? item.vicinity ?? "No address available",
           place_id: item.place_id,
-          types: item.types || [],
-          rating: item.rating || 0,
-          price_level: item.price_level || 0,
+          types: item.types ?? [],
+          rating: item.rating ?? 0,
+          price_level: item.price_level ?? 0,
           // Add coordinate format needed by the directions handler
           coordinate: {
             latitude: lat,
             longitude: lng,
           },
           // For compatibility with building data format
-          Address: item.formatted_address || item.vicinity || "No address available",
+          Address: item.formatted_address ?? item.vicinity ?? "No address available",
           Building_Long_Name: item.name
         },
       };

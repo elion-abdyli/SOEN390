@@ -162,7 +162,7 @@ const MapComponent = ({
         Longitude: userLocation?.longitude ?? 0,
       } : 
       {
-        Address: destination.Address || destination.Building_Long_Name || "Selected Location",
+        Address: destination.Address ?? destination.Building_Long_Name ?? "Selected Location",
         Latitude: destination.coordinate.latitude,
         Longitude: destination.coordinate.longitude,
       };
@@ -265,8 +265,8 @@ const MapComponent = ({
               latitude: feature.geometry.coordinates[1],
               longitude: feature.geometry.coordinates[0],
             }}
-            title={feature.properties.Building_Name || "POI"}
-            key={feature.properties.place_id || Math.random().toString()}
+            title={feature.properties.Building_Name ?? "POI"}
+            key={feature.properties.place_id ?? Math.random().toString()}
             pinColor="red"
            onPress={() => {
               handleMarkerPress(feature);
@@ -333,8 +333,8 @@ const MapComponent = ({
               latitude: feature.geometry.coordinates[1],
               longitude: feature.geometry.coordinates[0],
             }}
-            title={feature.properties.name || "POI"}
-            key={feature.properties.place_id || Math.random().toString()}
+            title={feature.properties.name ?? "POI"}
+            key={feature.properties.place_id ?? Math.random().toString()}
             pinColor="blue"
             onPress={() => {
               handleSearchResultPress({
@@ -363,7 +363,7 @@ const MapComponent = ({
       {showInfoBox && selectedCoordinate && selectedProperties && (
         <MarkerInfoBox
           coordinate={selectedCoordinate}
-          title={selectedProperties.Building_Name || selectedProperties.BuildingName || "Building"}
+          title={selectedProperties.Building_Name ?? selectedProperties.BuildingName ?? "Building"}
           properties={selectedProperties}
           onClose={() => {
             setShowInfoBox(false);
@@ -393,7 +393,7 @@ export default function MapExplorerScreen() {
   const [expanded, setExpanded] = useState(false);
   const route = useRoute<{ key: string; name: string; params: RouteParams }>();
   const { origin: originParam, destination: destinationParam } =
-    route.params || {};
+    route.params ?? {};
   const [visibleLayers, setVisibleLayers] = useState({
     hall9RoomsPois: true,
     hall9FloorPlan: true,
@@ -486,7 +486,7 @@ export default function MapExplorerScreen() {
     // Add effect to log results when they change
     useEffect(() => {
       console.log("Results state updated:", results);
-      console.log("Results has features:", results?.features?.length || 0);
+      console.log("Results has features:", results?.features?.length ?? 0);
     }, [results]);
 
   useEffect(() => {
