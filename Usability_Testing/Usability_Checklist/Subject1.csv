@@ -8,7 +8,6 @@ Subject ID,Test Area,Task Description,Time Taken,Success (Y/N),Errors Encountere
 1,Outdoor Directions,Task 4: Get directions from SGW to Loyola and vice versa.,30 seconds,Y,None,great
 1,Outdoor Directions,"Task 5: Utilize the Concordia Shuttle Service in directions (SGW to Loyola, Loyola to SGW).",4 seconds,Y,None,amazing
 1,Directions to Next Class,Task 1: Get directions from Hall 501 to Hall 1011.,N/A,N,,
-1,Directions to Next Class,Task 2: Get directions from Hall 501 to JMSB 1.101.,N/A,N,,
 1,Points of Interest,"Task 1: Find the nearest points of interest on campus (restaurants, coffee shops).",18 seconds,Y,None,clear 
 1,Points of Interest,Task 2: Get directions to Tim Hortons.,22 seconds,Y,None,very easy
 1,Metrics to Track,Time Taken (mins):,2 minutes 19 seconds,,,
