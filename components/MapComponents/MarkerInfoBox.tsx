@@ -37,7 +37,7 @@ export const MarkerInfoBox: React.FC<MarkerInfoBoxProps> = ({
                         <>
                             <Divider style={MarkerInfoBoxStyles.divider} />
                             <Text style={MarkerInfoBoxStyles.sectionTitle}>
-                                {properties?.poi_type ? 'Place Details' : 'Building Details'}
+                                {properties?.poi_type ? 'Place Details' : 'Details'}
                             </Text>
                             
                     

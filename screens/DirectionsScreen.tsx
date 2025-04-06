@@ -6,6 +6,8 @@ import MapView, {
   Region,
   LatLng,
   Callout,
+  Polyline,
+  Geojson
 } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -23,12 +25,23 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
 import { getTripDuration } from "@/services/DurationService";
+import { Building, Floor, getBuildingOutlines, getBuildingMarkers, getBuilding } from "@/services/GISImporterService";
+import { 
+  extractBuildingFromCode, 
+  extractFloorFromCode, 
+  routeToRoom, 
+  indoorToOutdoor, 
+  outdoorToIndoor 
+} from "@/services/IndoorDirService";
 
 const googleMapsKey = GOOGLE_MAPS_API_KEY;
 const BASE_PADDING = 50;
 
 export default function DirectionsScreen() {
   const mapRef = useRef<MapView | null>(null);
+  const [indoorPaths1, setIndoorPaths1] = useState<Array<PathFloorBundle>>([]);
+  const [selectedIndoorPathIndex1, setSelectedIndoorPathIndex1] = useState<number>(0);
+  const [destiProperties, setRouteRequestProperties] = useState<any>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
   const [showDirections, setShowDirections] = useState(false);
@@ -37,11 +50,24 @@ export default function DirectionsScreen() {
 
   type RouteParams = {
     destination?: {
+      ClassroomCode: string;
+      Properties: any;
       Address: string;
       Latitude: number;
       Longitude: number;
     };
   };
+
+  class PathFloorBundle {
+    buildingName: string;
+    floorName: string;
+    path: Array<any>;
+    constructor(buildingName: string, floorname: string, path: Array<any>) {
+      this.buildingName = buildingName;
+      this.floorName = floorname;
+      this.path = path;
+    }
+  }
 
   const route = useRoute<{ key: string; name: string; params: RouteParams }>();
 
@@ -74,8 +100,11 @@ export default function DirectionsScreen() {
 
   useEffect(() => {
     if (destinationObject) {
-      // if a destination object was passed
-      console.log("Received " + destinationObject.Address);
+
+      if(destinationObject.Properties)
+      {
+        setRouteRequestProperties(destinationObject);
+      }
 
       const initialDestinationSelect = async (
         setLocation: (loc: LatLng) => void,
@@ -116,6 +145,8 @@ export default function DirectionsScreen() {
             left: padding},
         animated: true,
       });
+
+      traceRoute();
     }
   }, [origin, destination]);
 
@@ -169,6 +200,58 @@ export default function DirectionsScreen() {
           googleMapsKey
         );
         setDirectionsRoute(directions);
+
+        if(destinationObject?.ClassroomCode)
+        {
+          const indoorDestinationPath = await outdoorToIndoor(destinationObject?.ClassroomCode, false)
+          if(indoorDestinationPath)
+          {
+            setSelectedIndoorPathIndex1(0);
+            let pathSegmentsArray: Array<PathFloorBundle> = []
+            
+            if(indoorDestinationPath.path1)
+            {
+              let pathCoordinates1 = indoorDestinationPath.path1.map( (point: any) => ( {
+                latitude: JSON.parse(point)[1], longitude: JSON.parse(point)[0]
+              } ) )
+              const matchBuilding = destinationObject?.ClassroomCode.match(/^([A-Za-z]+)/);
+              if (matchBuilding) {
+                const buildingCode = matchBuilding[1].toUpperCase();
+                const building = getBuilding(buildingCode);
+                if(Object.keys(building.floors).length > 0)
+                {
+                  const floor = Object.values(building.floors)[0];
+                  const floorCode = floor.id;
+                  let pathSegment1 = new PathFloorBundle(buildingCode, floorCode, pathCoordinates1);
+                  pathSegmentsArray.push(pathSegment1);
+                }
+              }
+            }
+            if(indoorDestinationPath.path2)
+            {
+              let pathCoordinates2 = indoorDestinationPath.path2.map( (point: any) => ( {
+                latitude: JSON.parse(point)[1], longitude: JSON.parse(point)[0]
+              } ) )
+              const matchBuilding2 = destinationObject?.ClassroomCode.match(/^([A-Za-z]+)/);
+              const matchFloor2 = destinationObject?.ClassroomCode.match(/\d+/);
+              if (matchBuilding2 && matchFloor2) {
+                const buildingCode2 = matchBuilding2[1].toUpperCase();
+                const floorCode2 = buildingCode2 + matchFloor2[0][0];
+                let pathSegment2 = new PathFloorBundle(buildingCode2, floorCode2, pathCoordinates2);
+                pathSegmentsArray.push(pathSegment2);
+              }
+            }
+            setIndoorPaths1(pathSegmentsArray);
+          }
+          else
+          {
+            setIndoorPaths1([]);
+          }
+        }
+        else
+        {
+          setIndoorPaths1([]);
+        }
       } catch (error) {
         console.error("Error fetching directions ", error);
       }
@@ -267,6 +350,20 @@ const setShuttleRoute = async () => {
     }
   }, [directionsRoute]);
 
+  const handleFloorplanPress = (event: any) => {
+    if(indoorPaths1)
+    {
+      if(selectedIndoorPathIndex1+1 >= indoorPaths1.length)
+      {
+        setSelectedIndoorPathIndex1(0);
+      }
+      else
+      {
+        setSelectedIndoorPathIndex1(selectedIndoorPathIndex1+1);
+      }
+    }
+  };
+
   return (
     <View style={DirectionsScreenStyles.container}>
       <MapView
@@ -274,6 +371,7 @@ const setShuttleRoute = async () => {
         style={DirectionsScreenStyles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={SGW_CAMPUS}
+        showsBuildings={false}
       >
         {origin && (
   <Marker 
@@ -301,6 +399,34 @@ const setShuttleRoute = async () => {
     </Callout>
   </Marker>
 )}
+
+{indoorPaths1 && 
+indoorPaths1.length > 0 && 
+selectedIndoorPathIndex1 < indoorPaths1.length && (
+  <Geojson
+  geojson={
+    getBuilding(indoorPaths1[selectedIndoorPathIndex1].buildingName)
+    .floors[indoorPaths1[selectedIndoorPathIndex1].floorName]
+    .plan
+  }
+  strokeColor="#0085cc"
+  fillColor="#29b4ff"
+  strokeWidth={2}
+  onPress={handleFloorplanPress}
+  tappable={true}
+/>
+)}
+
+ {indoorPaths1 && 
+ indoorPaths1.length > 0 &&
+ selectedIndoorPathIndex1 < indoorPaths1.length && (
+        <Polyline
+          coordinates={indoorPaths1[selectedIndoorPathIndex1].path}
+          strokeColor={'#fcc600'}
+          strokeWidth={4}
+          zIndex={100}>
+        </Polyline>
+        )}
 
         {directionsRoute && origin && destination && (
           <MapViewDirections

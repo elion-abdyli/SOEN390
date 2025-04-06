@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
 import { View, Alert, ScrollView, Dimensions, Text, Modal, TouchableOpacity } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker, Polyline } from "react-native-maps";
 
 import { DefaultMapStyle } from "@/Styles/MapStyles";
 import { CustomMarkersComponent } from "../components/MapComponents/MarkersComponent";
@@ -25,6 +25,7 @@ import { CommonActions } from '@react-navigation/native';
 
 import { directionModalStyles, MapExplorerScreenStyles } from "@/Styles/MapExplorerScreenStyles";
 import { searchPlaces } from "@/services/PlacesService";
+import { routeToRoom, indoorToOutdoor, outdoorToIndoor } from "@/services/IndoorDirService";
 
 import { Building, Floor, getBuildingOutlines, getBuildingMarkers, getBuilding } from "@/services/GISImporterService";
 import { floor } from "lodash";
@@ -41,10 +42,6 @@ const POI_ZOOM_REFRESH_THRESHOLD = 1.5; // How much zoom needs to change before 
 
 
 const markerImage = require("@/assets/images/marker.png");
-
-const handleRoomPoiPress = (event: any) => {
-  console.log("Hall 9 room POI pressed:", event);
-};
 
 const ZOOM_LEVEL_THRESHOLD = 19;
 const BUILDING_MARKERS_ZOOM_THRESHOLD = 18;
@@ -165,6 +162,21 @@ const MapComponent = ({
     }
   };
   
+  const handleRoomPoiPress = (markerData: any) => {
+    // Assuming markerData is the feature object
+    const coordinates = markerData.coordinates;
+
+    if (coordinates) {
+      const coordinate = { latitude: coordinates.latitude, longitude: coordinates.longitude };
+  
+      setSelectedCoordinate(coordinate);
+      setSelectedProperties(markerData.feature.properties
+        ? { ...markerData.feature.properties, coordinate }
+        : markerData);
+      setShowInfoBox(true);
+      setSelectedMarker(markerData);
+    }
+  };
 
   const handleDirections = (selectedProperties: any) => {
     if (!userLocation) {
@@ -188,6 +200,7 @@ const MapComponent = ({
         Address: destination.Address || destination.Building_Long_Name || "Selected Location",
         Latitude: destination.coordinate.latitude,
         Longitude: destination.coordinate.longitude,
+        ClassroomCode: selectedProperties.Code || ""
       };
       
     const originProps = origin === userLocation ?
@@ -204,6 +217,7 @@ const MapComponent = ({
       CommonActions.navigate({
         name: 'Directions',
         params: {
+          Properties: selectedProperties,
           origin: originProps,
           destination: destProps,
         },
@@ -313,14 +327,14 @@ const MapComponent = ({
             fillColor="rgba(255, 0, 0, 0.5)"
             strokeWidth={2}
             tappable={true}
-            onPress={handleRoomPoiPress}
+            onPress={(data: any) => {handleRoomPoiPress(data);}}
           />
         )}
         {selectedBuilding && selectedFloor && (
           <Geojson
             geojson={selectedFloor.plan}
-            strokeColor="orange"
-            fillColor="rgba(255, 165, 0, 0.5)"
+            strokeColor="#0085cc"
+            fillColor="#29b4ff"
             strokeWidth={2}
             tappable={true}
           />
@@ -386,7 +400,7 @@ const MapComponent = ({
       {showInfoBox && selectedCoordinate && selectedProperties && (
         <MarkerInfoBox
           coordinate={selectedCoordinate}
-          title={selectedProperties.Building_Name || selectedProperties.BuildingName || "Building"}
+          title={selectedProperties.Code || selectedProperties.Building_Name || selectedProperties.BuildingName || "Place"}
           properties={selectedProperties}
           onClose={() => {
             setShowInfoBox(false);
