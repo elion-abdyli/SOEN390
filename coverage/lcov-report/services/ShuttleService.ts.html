@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,57 +92,57 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import schedule from "@/assets/schedule.json";
 &nbsp;
-export const findNextShuttle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>huttleValid: boolean): string =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!shuttleValid) {</span>
-<span class="cstat-no" title="statement not covered" >        return "You are too far from either campus to use the shuttle service.";</span>
+export const findNextShuttle = (shuttleValid: boolean): string =&gt; {
+    if (!shuttleValid) {
+        return "You are too far from either campus to use the shuttle service.";
     }
 &nbsp;
-    const now = <span class="cstat-no" title="statement not covered" >new Date();</span>  // get current date time
-    const currentTime = <span class="cstat-no" title="statement not covered" >now.getHours() * 60 + now.getMinutes();</span> // get time in minutes since day began
+    const now = new Date();  // get current date time
+    const currentTime = now.getHours() * 60 + now.getMinutes(); // get time in minutes since day began
 &nbsp;
-    const shuttleSchedule = <span class="cstat-no" title="statement not covered" >schedule.times;</span>  // get shuttle times from schedule json
+    const shuttleSchedule = schedule.times;  // get shuttle times from schedule json
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; Object.keys(shuttleSchedule).length; i++) {</span>
-        const timeArray = <span class="cstat-no" title="statement not covered" >shuttleSchedule[i].split(":");</span>  // split time string into hours and minutes
-        const hours = <span class="cstat-no" title="statement not covered" >Number(timeArray[0]);</span>
-        const minutes = <span class="cstat-no" title="statement not covered" >Number(timeArray[1]);</span>  // get hours and minutes in a number format
-        const time = <span class="cstat-no" title="statement not covered" >hours * 60 + minutes;</span>  // get the time in minutes for comparator
+    for (let i = 0; i &lt; Object.keys(shuttleSchedule).length; i++) {
+        const timeArray = shuttleSchedule[i].split(":");  // split time string into hours and minutes
+        const hours = Number(timeArray[0]);
+        const minutes = Number(timeArray[1]);  // get hours and minutes in a number format
+        const time = hours * 60 + minutes;  // get the time in minutes for comparator
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (time &gt; currentTime) {  // this means that the time coming up is the closest to our current time</span>
+        if (time &gt; currentTime) {  // this means that the time coming up is the closest to our current time
             // get minutes till shuttle by subtracting, turn to String and create message
-            const returnString = <span class="cstat-no" title="statement not covered" >"Time Until Next Shuttle: " + String(time - currentTime) + " min";</span>
-<span class="cstat-no" title="statement not covered" >            return returnString;</span>
+            const returnString = "Time Until Next Shuttle: " + String(time - currentTime) + " min";
+            return returnString;
         }
     }
-    const returnString = <span class="cstat-no" title="statement not covered" >"No More Shuttles Today, Try Again Before 6:45PM Tomorrow";</span>
-<span class="cstat-no" title="statement not covered" >    return returnString; </span> // fall back if no matches were found
+    const returnString = "No More Shuttles Today, Try Again Before 6:45PM Tomorrow";
+    return returnString;  // fall back if no matches were found
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -151,7 +151,7 @@ export const findNextShuttle = <span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-06T05:32:18.716Z
+                at 2025-04-05T14:29:12.440Z
             </div>
         <script src="../prettify.js"></script>
         <script>

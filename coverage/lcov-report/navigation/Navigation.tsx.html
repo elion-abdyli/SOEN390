@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">93.75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>15/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -120,27 +120,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,27 +165,27 @@ import SettingsScreen from '../screens/SettingsScreen';
 import UpdatesScreen from '../screens/UpdatesScreen';
 &nbsp;
 // Tab Navigator
-const Tab = <span class="cstat-no" title="statement not covered" >createBottomTabNavigator();</span>
-export default function <span class="fstat-no" title="function not covered" >Navigation(</span>) {
-<span class="cstat-no" title="statement not covered" >    return (</span>
+const Tab = createBottomTabNavigator();
+export default function Navigation() {
+    return (
         &lt;Tab.Navigator
-        screenOptions={<span class="fstat-no" title="function not covered" >({</span> route }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-            tabBarIcon: <span class="fstat-no" title="function not covered" >({</span> focused, color, size }) =&gt; {
+        screenOptions={({ route }) =&gt; ({
+            tabBarIcon: ({ focused, color, size }) =&gt; {
             // Initialize iconName with a valid Ionicons name
-            let iconName: keyof typeof Ionicons.glyphMap = <span class="cstat-no" title="statement not covered" >'home';</span> // Default fallback
+            let iconName: keyof typeof Ionicons.glyphMap = 'home'; // Default fallback
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            if (route.name === 'Map') {</span>
-<span class="cstat-no" title="statement not covered" >                iconName = focused ? 'home' : 'home-outline';</span>
-            } else <span class="cstat-no" title="statement not covered" >if (route.name === 'Directions') {</span>
-<span class="cstat-no" title="statement not covered" >                iconName = focused ? 'navigate' : 'navigate-outline';</span>
-            } else <span class="cstat-no" title="statement not covered" >if (route.name === 'Settings') {</span>
-<span class="cstat-no" title="statement not covered" >                iconName = focused ? 'settings' : 'settings-outline';</span>
-            } else <span class="cstat-no" title="statement not covered" >if (route.name === 'Updates') {</span>
-<span class="cstat-no" title="statement not covered" >                iconName = focused ? 'information-circle' : 'information-circle-outline';</span>
+            if (route.name === 'Map') {
+                iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Directions') {
+                iconName = focused ? 'navigate' : 'navigate-outline';
+            } else if (route.name === 'Settings') {
+                iconName = focused ? 'settings' : 'settings-outline';
+            } else <span class="missing-if-branch" title="else path not taken" >E</span>if (route.name === 'Updates') {
+                iconName = focused ? 'information-circle' : 'information-circle-outline';
             }
 &nbsp;
             // Return the Ionicons component with a valid `name` prop
-<span class="cstat-no" title="statement not covered" >            return &lt;Ionicons name={iconName} size={size} color={color} /&gt;;</span>
+            return &lt;Ionicons name={iconName} size={size} color={color} /&gt;;
             },
             tabBarActiveTintColor: '#722F37',
             tabBarInactiveTintColor: 'gray',
@@ -205,7 +205,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-06T05:32:18.716Z
+                at 2025-04-05T14:29:12.440Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -2,10 +2,19 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import SettingsScreen from '../SettingsScreen';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 jest.mock('expo-location', () => ({
   requestForegroundPermissionsAsync: jest.fn(),
   getCurrentPositionAsync: jest.fn(),
+}));
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(() => Promise.resolve()),
+  getItem: jest.fn(() => Promise.resolve(null)), 
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+  getAllKeys: jest.fn(() => Promise.resolve([])),
 }));
 
 describe('SettingsScreen', () => {
@@ -15,7 +24,7 @@ describe('SettingsScreen', () => {
 
   it('renders correctly', () => {
     const { getByText } = render(<SettingsScreen />);
-    expect(getByText('Settings Screen')).toBeTruthy();
+    expect(getByText('Connect Google Calendar')).toBeTruthy();
   });
 
   it('requests location permission and gets location on button press', async () => {
@@ -41,7 +50,6 @@ describe('SettingsScreen', () => {
 
     fireEvent.press(getLocationButton);
 
-    // Ensure the getCurrentPositionAsync is not called when permission is denied
     await waitFor(() => {
       expect(Location.getCurrentPositionAsync).not.toHaveBeenCalled();
     });

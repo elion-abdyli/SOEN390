@@ -12,7 +12,7 @@
 
 ### Changes Made
 <!-- List and explain the key changes made in this PR. -->
- - Example: Refactored the `auth` module for better readability.
+<!-- - Example: Refactored the `auth` module for better readability. -->
 
 ### Notes
 <!-- Any additional information that might be useful for the reviewer, such as design decisions, potential edge cases, etc. -->

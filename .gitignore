@@ -50,5 +50,7 @@ constants/GoogleKey.ts
 .vscode/
 /.vscode
 
+/yarn.lock
+
 #coverage folder
 coverage/
