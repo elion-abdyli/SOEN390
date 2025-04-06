@@ -24,7 +24,6 @@ export default function SettingsScreen() {
   return (
     <View style={styles.container}>
       <GoogleSign></GoogleSign>
-      <AuthUser></AuthUser>
       <Button title="Get Location" onPress={handleGetLocation} />
     </View>
   );
