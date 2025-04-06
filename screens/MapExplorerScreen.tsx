@@ -22,21 +22,6 @@ import { AutocompleteSearchWrapper } from "@/components/InputComponents/AutoComp
 import { MarkerInfoBox } from "@/components/MapComponents/MarkerInfoBox";
 import { directionModalStyles, MapExplorerScreenStyles } from "@/Styles/MapExplorerScreenStyles";
 import { searchPlaces } from "@/services/PlacesService";
-import {
-  POI_MIN_ZOOM_LEVEL,
-  POI_MAX_ZOOM_LEVEL,
-  POI_RADIUS_MIN,
-  POI_RADIUS_MAX,
-  POI_ZOOM_REFRESH_THRESHOLD,
-  ZOOM_LEVEL_THRESHOLD,
-  BUILDING_MARKERS_ZOOM_THRESHOLD,
-  buildingMarkers,
-  buildingOutlines,
-  hall9RoomsPois,
-  hall9FloorPlan,
-  hall8RoomsPois,
-  hall8FloorPlan,
-} from "@/constants/MapExplorerScreen";
 import { routeToRoom, indoorToOutdoor, outdoorToIndoor } from "@/services/IndoorDirService";
 
 import { Building, Floor, getBuildingOutlines, getBuildingMarkers, getBuilding } from "@/services/GISImporterService";
