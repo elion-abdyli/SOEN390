@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Keyboard, Alert, Text } from "react-native";
 import MapView, { Region } from "react-native-maps";
-import { DefaultMapStyle } from "@/Styles/MapStyles";
+import { AutocompleteSearchStyles} from "@/Styles/AutoCompleteSearchBarStyles";
 import { searchPlaces } from "@/services/PlacesService";
 import { Button } from "react-native-paper";
 import { GooglePlaceData, GooglePlaceDetail, GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { ButtonsStyles } from "@/Styles/ButtonStyles";
 import { LATITUDE_DELTA, LONGITUDE_DELTA } from "@/constants/MapsConstants";
+
 // The single search UI, combining autocomplete + text-based search
 export const AutocompleteSearchWrapper = ({
   mapRef,
@@ -89,8 +90,8 @@ export const AutocompleteSearchWrapper = ({
       
       const geojson = await searchPlaces(
         autoSearchText,
-        userLocation?.latitude || currentCampus.latitude,
-        userLocation?.longitude || currentCampus.longitude,
+        userLocation?.latitude ?? currentCampus.latitude,
+        userLocation?.longitude ?? currentCampus.longitude,
         googleMapsKey,
         distanceMeters
       );
@@ -101,7 +102,7 @@ export const AutocompleteSearchWrapper = ({
       }
 
       // Set the results
-      setResults(geojson as any);
+      setResults(geojson);
       
       if (geojson.features.length) {
         const coords = geojson.features.map((feature: any) => ({
@@ -132,7 +133,7 @@ export const AutocompleteSearchWrapper = ({
     if (!details) return;
 
     // Report the search text to the parent component
-    onSearchTextChange?.(data.description || "");
+    onSearchTextChange?.(data.description ?? "");
 
     const { lat, lng } = details.geometry.location;
     
@@ -159,16 +160,16 @@ export const AutocompleteSearchWrapper = ({
         properties: {
           name: details.name,
           place_id: details.place_id,
-          formatted_address: details.formatted_address || details.vicinity || "No address available",
-          types: details.types || [],
-          rating: (details as any).rating || 0,
-          price_level: (details as any).price_level || 0,
+          formatted_address: details.formatted_address ?? details.vicinity ?? "No address available",
+          types: details.types ?? [],
+          rating: (details as any).rating ?? 0,
+          price_level: (details as any).price_level ?? 0,
           coordinate: {
             latitude: lat,
             longitude: lng,
           },
           // For compatibility with building data format
-          Address: details.formatted_address || details.vicinity || "No address available",
+          Address: details.formatted_address ?? details.vicinity ?? "No address available",
           Building_Long_Name: details.name,
         }
       }]
@@ -270,50 +271,22 @@ export const AutocompleteSearchWrapper = ({
             </View>
           );
         }}
-        styles={{
-          container: { 
-            flex: 0,
-            width: '100%',
-            zIndex: 9999
-          },
-          textInput: {
-            ...DefaultMapStyle.searchBox,
-            height: 44,
-          },
-          listView: { 
-            backgroundColor: 'white',
-            borderWidth: 1,
-            borderColor: '#ddd',
-            position: 'absolute',
-            top: 44,
-            left: 0,
-            right: 0,
-            zIndex: 9999,
-            elevation: 5,
-          },
-          row: { 
-            padding: 13, 
-            height: 'auto', 
-            backgroundColor: 'white'
-          },
-          separator: { height: 1, backgroundColor: '#c8c7cc' },
-          description: { fontSize: 15 },
-          predefinedPlacesDescription: {
-            color: '#1faadb',
-          },
-        }}
-      />
+        styles={AutocompleteSearchStyles}
+        />
 
       {/* Buttons below the Autocomplete input */}
-      <View style={{ flexDirection: "row", marginTop: 10 }}>
+      <View style={AutocompleteSearchStyles.buttonsContainer}>
         <Button
           mode="contained"
           onPress={handleFullTextSearch}
-          style={{ marginRight: 5, flex: 1 }}
-        >
+          style={AutocompleteSearchStyles.searchButton}
+          >
           Search
         </Button>
-        <Button mode="contained" onPress={handleClearAll} style={{ backgroundColor: "red", flex: 1 }}>
+        <Button 
+          mode="contained" 
+          onPress={handleClearAll} 
+          style={AutocompleteSearchStyles.clearButton}>
           Clear
         </Button>
       </View>
