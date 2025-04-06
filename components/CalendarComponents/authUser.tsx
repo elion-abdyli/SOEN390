@@ -92,7 +92,6 @@ export default function AuthUser() {
         // but just in case, try to extract it here too
         //if (result.url && result.url.includes('access_token=')) {
         if (result.url?.includes('access_token=')) {
-          //const match = result.url.match(/access_token=([^&]*)/);
           const regex = /access_token=([^&]*)/;
           const match = regex.exec(result.url);
 

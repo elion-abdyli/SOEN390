@@ -23,7 +23,7 @@ export const MarkerInfoBox: React.FC<MarkerInfoBoxProps> = ({
 }) => {
     const displayProperties = properties ?? {};
 
-    const { coordinate: _, ...displayProps } = displayProperties;
+    const { coordinate: _ } = displayProperties;
 
     return (
         <View style={MarkerInfoBoxStyles.overlay}>
