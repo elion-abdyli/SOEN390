@@ -138,7 +138,13 @@ const MapComponent = ({
       if(newBuilding)
       {
         setSelectedBuilding(newBuilding);
-        setSelectedFloor((Object.values(newBuilding.floors)[0]) as Floor);
+        const entries = Object.entries(newBuilding.floors);
+        if (entries.length > 0) {
+          const [key, floor] = entries[0];
+          setSelectedFloor(floor);
+        } else {
+          setSelectedFloor(null);
+        }
       }
       else
       {
