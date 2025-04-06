@@ -50,4 +50,5 @@ constants/GoogleKey.ts
 .vscode/
 /.vscode
 
-/yarn.lock
+android/app/build/
+android/app/src/main/AndroidManifest.xml

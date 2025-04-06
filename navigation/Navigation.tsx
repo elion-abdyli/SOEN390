@@ -8,6 +8,7 @@ import MapExplorerScreen from '../screens/MapExplorerScreen';
 import DirectionsScreen from '../screens/DirectionsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import UpdatesScreen from '../screens/UpdatesScreen';
+import CalendarScreen from '@/screens/CalendarScreen';
 
 // Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -27,7 +28,9 @@ export default function Navigation() {
                 iconName = focused ? 'settings' : 'settings-outline';
             } else if (route.name === 'Updates') {
                 iconName = focused ? 'information-circle' : 'information-circle-outline';
-            }
+            } else if (route.name === 'Calendar') {
+                iconName = focused ? 'calendar' : 'calendar-outline'; }
+
 
             // Return the Ionicons component with a valid `name` prop
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -40,6 +43,7 @@ export default function Navigation() {
         <Tab.Screen name="Directions" component={DirectionsScreen} />
         <Tab.Screen name="Updates" component={UpdatesScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
         </Tab.Navigator>
     );
 }

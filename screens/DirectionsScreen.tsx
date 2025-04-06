@@ -24,7 +24,7 @@ import * as Location from "expo-location";
 
 import { getTripDuration } from "@/services/DurationService";
 
-const googleMapsKey = GOOGLE_MAPS_API_KEY;
+// const googleMapsKey = GOOGLE_MAPS_API_KEY;
 const BASE_PADDING = 50;
 
 export default function DirectionsScreen() {
