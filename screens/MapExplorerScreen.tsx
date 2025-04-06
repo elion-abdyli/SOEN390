@@ -242,6 +242,8 @@ const MapComponent = ({
     onRegionChangeComplete(region);
   };
 
+  const shouldSearch = currentSearchText && currentSearchText.trim() !== "";
+
   return (
     <>
     {renderDirectionModal()}
@@ -306,8 +308,7 @@ const MapComponent = ({
         {!searchCleared && 
           results.features && 
           shouldShowPOIs && 
-          currentSearchText && 
-          currentSearchText.trim() !== "" && 
+          shouldSearch &&
           results.features.length > 0 && (
           <Geojson
             geojson={results}
@@ -324,8 +325,7 @@ const MapComponent = ({
         {!searchCleared && 
           results.features && 
           shouldShowPOIs && 
-          currentSearchText && 
-          currentSearchText.trim() !== "" && 
+          shouldSearch &&
           results.features.length > 0 && 
           results.features.map((feature: any) => (
           <Marker
