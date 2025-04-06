@@ -3,6 +3,7 @@
 "name": "hall-1-rooms-pois",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
+{ "type": "Feature", "properties": { "id": 12, "Code": "hall1ELEV", "Type": "Elevator" }, "geometry": { "type": "Point", "coordinates": [ -73.578668942879247, 45.497298009574401 ] } },
 { "type": "Feature", "properties": { "id": 1, "Code": "H101", "Type": "???" }, "geometry": { "type": "Point", "coordinates": [ -73.578399983465175, 45.497389392893282 ] } },
 { "type": "Feature", "properties": { "id": 2, "Code": "H102-2", "Type": "???" }, "geometry": { "type": "Point", "coordinates": [ -73.578482850110703, 45.497416432312633 ] } },
 { "type": "Feature", "properties": { "id": 3, "Code": "hall1ENTR", "Type": "Entrance" }, "geometry": { "type": "Point", "coordinates": [ -73.578682873048237, 45.497004330123637 ] } },

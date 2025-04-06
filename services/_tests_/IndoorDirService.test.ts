@@ -154,13 +154,13 @@ const testHallwaysData: Record<string, FeatureCollection> = {
   }
 };
 
-const originalReverseLookup = require('../indoorDirService').reverseLookup;
+const originalReverseLookup = require('../IndoorDirService').reverseLookup;
 beforeAll(() => {
-  require('../indoorDirService').reverseLookup = testHallwaysData;
+  require('../IndoorDirService').reverseLookup = testHallwaysData;
 });
 
 afterAll(() => {
-  require('../indoorDirService').reverseLookup = originalReverseLookup;
+  require('../IndoorDirService').reverseLookup = originalReverseLookup;
 });
 
 describe('loadHallwaysData', () => {
