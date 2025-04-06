@@ -11,6 +11,7 @@ import mb2Hallways from "../gis/mb-2-hallways.json";
 import hall8Hallways from "../gis/hall-8-hallways.json";
 import hall9Hallways from "../gis/hall-9-hallways.json";
 import { FeatureCollection, Feature, MultiLineString } from 'geojson';
+import { Room, Hallway, Graph, Distances, PreviousNodes, PathResult } from '../types/IndoorDirServiceTypes';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
@@ -30,16 +31,6 @@ const reverseLookup: Record<string, any> = {
 }
 
 
-export interface Room {
-    code: string;
-    coordinates: [number, number]; // [longitude, latitude]
-}
-
-interface Hallway {
-    name: string;
-    hallways: number[][][]; // MultiLineString format from JSON
-}
-
 
 // FUNCTIONS TO EXTRACT DATA FROM GIS JSON FILES
 export const extractRooms = (data: any): Room[] => {
@@ -55,7 +46,7 @@ export const extractHallways = (data: any, name: string): Hallway => ({
 });
 
 //"DATABASE" VARIABLES THAT HOLD HALLWAYS FOR EACH FLOOR AND ROOMS FOR EACH FLOOR
-const hallwaysList: Hallway[] = [
+export const hallwaysList: Hallway[] = [
     extractHallways(hall1Hallways, "hall-1-hallways"),
     extractHallways(hall2Hallways, "hall-2-hallways"),
     extractHallways(hall8Hallways, "hall-8-hallways"),
@@ -138,10 +129,6 @@ export const findClosestNode = (graph: Graph, target: string): string => {
   return closestNode;
 };
 
-export type Graph = Record<string, string[]>; // Adjacency list
-type Distances = Record<string, number>;
-type PreviousNodes = Record<string, string | null>;
-
 //DIJKSTRA FUNCTION
 export const dijkstra = (
   graph: Graph,
@@ -206,12 +193,6 @@ export const splitRoomCode = (roomCode: string): { letters: string; numbers: str
     if (!match) throw new Error(`Invalid room code format: ${roomCode}`);
     return { letters: match[1], numbers: match[2] };
 };
-
-// MAIN FUNCTION
-type PathResult =
-  | string[]  
-  | { path1: string[]; path2: string[] }  // Different floors
-  | { path1: string[]; path2: string[]; path3: string[]; path4: string[] };
 
 export const compareRooms = async (room1: string, room2: string, forDisabled: boolean = false): Promise<PathResult> => {
     const { letters: letters1, numbers: numbers1 } = splitRoomCode(room1);

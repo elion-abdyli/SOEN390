@@ -1,12 +1,12 @@
 import { extractRooms, extractHallways } from '../IndoorDirService'
 import { createHallwayGraph } from '../IndoorDirService';
-import { Graph } from '../IndoorDirService';
+import { Graph } from '../../types/IndoorDirServiceTypes';
 import { loadHallwaysData } from '../IndoorDirService';
 import { calculateDistance } from '../IndoorDirService';
 import { findClosestNode } from '../IndoorDirService';
 import { dijkstra } from '../IndoorDirService';
 import { splitRoomCode } from '../IndoorDirService';
-import type { Room } from '../IndoorDirService'
+import type { Room } from '../../types/IndoorDirServiceTypes'
 import { getRoomCoordinates, extractBuildingFromCode, extractFloorFromCode } from '../IndoorDirService';
 import { sameFloor, differentFloor, differentBuilding, indoorToOutdoor, outdoorToIndoor } from '../IndoorDirService';
 import { calculateDistanceForGeoposition } from '../IndoorDirService';
