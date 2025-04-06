@@ -25,6 +25,8 @@ jobs:
         run: yarn install --legacy-peer-deps
       - name: Install Expo modules
         run: npx expo install --fix
+      - name: Install Jest globally 
+        run: npm install -g jest  # Install Jest globally
       - name: Run Jest Tests with Coverage (Again for Sonar)
         run: npx jest --coverage
       - name: SonarCloud Scan
