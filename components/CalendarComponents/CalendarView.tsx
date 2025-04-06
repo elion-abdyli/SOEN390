@@ -4,20 +4,54 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import { Styles, toggleStyles } from "@/Styles/CalendarStyles";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import axios from "axios";
 
 
-// Define the calendar type enum
-enum CalendarType {
-  COURSES = 'Courses',
-  PERSONAL = 'Personal',
-  WORK = 'Work',
+interface CalendarData {
+  id: string;
+  name: string;
 }
+
+
+const CalendarFetching = async (): Promise<CalendarData[] | undefined> => {
+  try {
+    const { accessToken } = await GoogleSignin.getTokens();
+
+    const calendarResponse = await axios.get(
+      'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const calendars = calendarResponse.data.items;
+
+    if (!calendars || calendars.length === 0) {
+      console.log('No calendars found.');
+      return;
+    }
+
+    // Only return name and id of calendars
+    const calendarData: CalendarData[] = calendars.map((calendar: any) => ({
+      id: calendar.id,
+      name: calendar.summary,
+    }));
+
+    return calendarData;
+  } catch (error) {
+    console.error('Error fetching calendars:', error);
+    return;
+  }
+};
+
+
 
 // Extended props interface to include calendar types
 interface CalendarViewProps {
-  events: {
-    [key in CalendarType]?: EventsType;
-  };
+  events: any; // Assuming a structure for events, update based on your actual event types
   selectedDate: string;
   onDateSelect: (date: string) => void;
   isLoading?: boolean;
@@ -31,54 +65,64 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   isLoading = false,
   error = null
 }) => {
-  // State for marked dates on the calendar
-  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
-  
-  // State for active calendar type
-  const [activeCalendar, setActiveCalendar] = useState<CalendarType>(CalendarType.COURSES);
-  
-  // Get the events for the currently active calendar
-  const currentEvents = events[activeCalendar] || {};
+  const [markedDates, setMarkedDates] = useState({});
+  const [activeCalendar, setActiveCalendar] = useState<string | null>(null);
+  const [calendars, setCalendars] = useState<CalendarData[]>([]);
+
+
+
+
+  useEffect(() => {
+    const fetchCalendars = async () => {
+      const calendarData = await CalendarFetching();
+      if (calendarData) {
+        setCalendars(calendarData);
+        setActiveCalendar(calendarData[0]?.id || null); // Default to first calendar
+      }
+    };
+
+    fetchCalendars();
+  }, []);
 
   // Update marked dates when events, selected date, or active calendar changes
-  useEffect(() => {
-    try {
-      const marked: MarkedDates = {};
+  // useEffect(() => {
+  //   try {
+  //     const marked: MarkedDates = {};
       
-      // Mark dates that have events in the current calendar
-      Object.keys(currentEvents).forEach(date => {
-        marked[date] = {
-          marked: true,
-          dotColor: getCalendarColor(activeCalendar)
-        };
-      });
+  //     // Mark dates that have events in the current calendar
+  //     Object.keys(currentEvents).forEach(date => {
+  //       marked[date] = {
+  //         marked: true,
+  //         dotColor: getCalendarColor(activeCalendar)
+  //       };
+  //     });
       
-      // Mark the selected date
-      marked[selectedDate] = {
-        ...marked[selectedDate],
-        selected: true,
-        selectedColor: getCalendarColor(activeCalendar)
-      };
+  //     // Mark the selected date
+  //     marked[selectedDate] = {
+  //       ...marked[selectedDate],
+  //       selected: true,
+  //       selectedColor: getCalendarColor(activeCalendar)
+  //     };
       
-      setMarkedDates(marked);
-    } catch (err) {
-      console.error('Error setting marked dates:', err);
-    }
-  }, [currentEvents, selectedDate, activeCalendar]);
+  //     setMarkedDates(marked);
+  //   } catch (err) {
+  //     console.error('Error setting marked dates:', err);
+  //   }
+  // }, [currentEvents, selectedDate, activeCalendar]);
 
   // Helper function to get color based on calendar type
-  const getCalendarColor = (type: CalendarType): string => {
-    switch (type) {
-      case CalendarType.COURSES:
-        return '#2E66E7'; // Blue
-      case CalendarType.PERSONAL:
-        return '#E91E63'; // Pink
-      case CalendarType.WORK:
-        return '#4CAF50'; // Green
-      default:
-        return '#2E66E7';
-    }
-  };
+  // const getCalendarColor = (type: CalendarType): string => {
+  //   switch (type) {
+  //     case CalendarType.COURSES:
+  //       return '#2E66E7'; // Blue
+  //     case CalendarType.PERSONAL:
+  //       return '#E91E63'; // Pink
+  //     case CalendarType.WORK:
+  //       return '#4CAF50'; // Green
+  //     default:
+  //       return '#2E66E7';
+  //   }
+  // };
 
   const handleDayPress = (day: DateData): void => {
     try {
@@ -89,33 +133,63 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   };
 
   // Toggle between different calendar types
-  const handleCalendarToggle = (type: CalendarType) => {
-    setActiveCalendar(type);
+  const handleCalendarToggle = (calendarId: string) => {
+    setActiveCalendar(calendarId);
   };
 
   // Render calendar type toggles
+  // const renderCalendarToggles = () => {
+  //   return (
+  //     <View style={toggleStyles.toggleContainer}>
+  //       {Object.values(CalendarType).map((type) => (
+  //         <TouchableOpacity
+  //           key={type}
+  //           style={[
+  //             toggleStyles.toggleButton,
+  //             activeCalendar === type && { 
+  //               backgroundColor: getCalendarColor(type),
+  //               borderColor: getCalendarColor(type),
+  //             }
+  //           ]}
+  //           onPress={() => handleCalendarToggle(type)}
+  //         >
+  //           <Text
+  //             style={[
+  //               toggleStyles.toggleText,
+  //               activeCalendar === type && toggleStyles.activeToggleText
+  //             ]}
+  //           >
+  //             {type}
+  //           </Text>
+  //         </TouchableOpacity>
+  //       ))}
+  //     </View>
+  //   );
+  // };
+
+
   const renderCalendarToggles = () => {
     return (
       <View style={toggleStyles.toggleContainer}>
-        {Object.values(CalendarType).map((type) => (
+        {calendars.map((calendar) => (
           <TouchableOpacity
-            key={type}
+            key={calendar.id}
             style={[
               toggleStyles.toggleButton,
-              activeCalendar === type && { 
-                backgroundColor: getCalendarColor(type),
-                borderColor: getCalendarColor(type),
-              }
+              activeCalendar === calendar.id && {
+                backgroundColor: '#2E66E7',
+                borderColor: '#2E66E7',
+              },
             ]}
-            onPress={() => handleCalendarToggle(type)}
+            onPress={() => handleCalendarToggle(calendar.id)}
           >
             <Text
               style={[
                 toggleStyles.toggleText,
-                activeCalendar === type && toggleStyles.activeToggleText
+                activeCalendar === calendar.id && toggleStyles.activeToggleText,
               ]}
             >
-              {type}
+              {calendar.name}
             </Text>
           </TouchableOpacity>
         ))}
@@ -137,7 +211,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     <View style={Styles.container}>
       {/* Calendar type toggle buttons */}
       {renderCalendarToggles()}
-      
+
       {isLoading ? (
         <View style={Styles.loadingContainer}>
           <Text>Loading calendar...</Text>
@@ -149,16 +223,16 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           theme={{
             calendarBackground: '#ffffff',
             textSectionTitleColor: '#b6c1cd',
-            selectedDayBackgroundColor: getCalendarColor(activeCalendar),
+            selectedDayBackgroundColor: '#2E66E7',
             selectedDayTextColor: '#ffffff',
-            todayTextColor: getCalendarColor(activeCalendar),
+            todayTextColor: '#2E66E7',
             dayTextColor: '#2d4150',
             textDisabledColor: '#d9e1e8',
-            dotColor: getCalendarColor(activeCalendar),
+            dotColor: '#2E66E7',
             selectedDotColor: '#ffffff',
-            arrowColor: getCalendarColor(activeCalendar),
+            arrowColor: '#2E66E7',
             monthTextColor: '#2d4150',
-            indicatorColor: getCalendarColor(activeCalendar),
+            indicatorColor: '#2E66E7',
           }}
           enableSwipeMonths={true}
         />
@@ -169,3 +243,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
 
 
 export default CalendarView;
+
+
+
+

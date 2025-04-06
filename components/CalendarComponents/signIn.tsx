@@ -4,7 +4,7 @@ import {
     statusCodes,
     isErrorWithCode
   } from '@react-native-google-signin/google-signin';
-import { getCalendarEvents } from './CalendarEvent';
+import { getCalendarEvents } from './CalendarFetching';
  
  
  
