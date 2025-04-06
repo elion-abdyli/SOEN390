@@ -49,3 +49,6 @@ constants/GoogleKey.ts
 
 .vscode/
 /.vscode
+
+#coverage folder
+coverage/
