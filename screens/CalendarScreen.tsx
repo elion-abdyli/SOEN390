@@ -100,6 +100,16 @@ const CalendarScreen: React.FC = () => {
           error={isOffline ? new Error('You are offline. Please check your connection.') : error}
         />
       </View>
+
+      {/* Events section - bottom half */}
+      <View style={CalendarScreemStyles.eventsContainer}>
+        <EventList 
+          date={selectedDate}
+          events={selectedDateEvents}
+          isLoading={isLoading && !isOffline && selectedDate !== getTodayString()}
+          error={isOffline ? new Error('You are offline. Please check your connection.') : error}
+        />
+      </View>
     </SafeAreaView>
   );
 };

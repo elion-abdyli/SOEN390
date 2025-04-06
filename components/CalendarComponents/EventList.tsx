@@ -4,16 +4,16 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-nat
 import { Card } from 'react-native-paper';
 import { EventListStyles } from '@/Styles/CalendarStyles';
 
-interface Event {
-  id: string;
-  title: string;
-  time: string;
+export interface CalendarEventInterface {
   description: string;
+  id: string;
+  time: string;
+  title: string;
 }
 
 interface EventListProps {
   date: string;
-  events: Event[];
+  events: CalendarEventInterface[];
   isLoading?: boolean;
   error?: Error | null;
 }
@@ -24,6 +24,9 @@ const EventList: React.FC<EventListProps> = ({
   isLoading = false,
   error = null
 }) => {
+
+
+
   // Format date for display
   const formatDate = (dateString: string): string => {
     try {
@@ -40,8 +43,10 @@ const EventList: React.FC<EventListProps> = ({
   };
 
   // Event card component
-  const EventCard: React.FC<{ event: Event }> = ({ event }) => (
+  const EventCard: React.FC<{ event: CalendarEventInterface }> = ({ event }) => (
+
     <Card style={EventListStyles.card} mode="outlined">
+      {console.log("................... ", event)}
       <Card.Content>
         <Text style={EventListStyles.eventTitle}>{event.title}</Text>
         <Text style={EventListStyles.eventTime}>{event.time}</Text>
@@ -72,7 +77,7 @@ const EventList: React.FC<EventListProps> = ({
       <Text style={EventListStyles.dateHeader}>
         Events for {formatDate(date)}
       </Text>
-      
+      {console.log(events.length > 0)}
       <ScrollView style={EventListStyles.eventsScrollView}>
         {events.length > 0 ? (
           events.map(event => (

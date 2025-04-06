@@ -13,7 +13,6 @@ import { getCalendarEvents } from './CalendarFetching';
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
       console.log(response.data?.user)
-      getCalendarEvents();
 
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -33,5 +32,15 @@ import { getCalendarEvents } from './CalendarFetching';
       } else {
         console.log("4") // operation (eg. sign in) already in progress
     }
+    }
+  };
+
+  export const signOut = async (setState) => {
+    try {
+      await GoogleSignin.signOut();
+      setState({ user: null });
+      console.log("Signed Out") // Clear user from state
+    } catch (error) {
+      console.error(error);
     }
   };

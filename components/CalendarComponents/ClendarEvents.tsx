@@ -40,6 +40,8 @@ export const getCalendarEvents = async (id : string) => {
       }
     );
 
+     
+
   } catch (error) {
     console.error('Error fetching calendar events:', error);
     return { calendars: [], eventsByCalendar: {} };

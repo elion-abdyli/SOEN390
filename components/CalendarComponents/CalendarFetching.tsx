@@ -2,7 +2,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from 'axios';
 
 
-export const CalendarFetching = async () => {
+export const getCalendarEvents = async () => {
   try {
     const { accessToken } = await GoogleSignin.getTokens();
 
