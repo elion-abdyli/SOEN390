@@ -89,8 +89,8 @@ export const AutocompleteSearchWrapper = ({
       
       const geojson = await searchPlaces(
         autoSearchText,
-        userLocation?.latitude || currentCampus.latitude,
-        userLocation?.longitude || currentCampus.longitude,
+        userLocation?.latitude ?? currentCampus.latitude,
+        userLocation?.longitude ?? currentCampus.longitude,
         googleMapsKey,
         distanceMeters
       );
@@ -132,7 +132,7 @@ export const AutocompleteSearchWrapper = ({
     if (!details) return;
 
     // Report the search text to the parent component
-    onSearchTextChange?.(data.description || "");
+    onSearchTextChange?.(data.description ?? "");
 
     const { lat, lng } = details.geometry.location;
     
@@ -159,16 +159,16 @@ export const AutocompleteSearchWrapper = ({
         properties: {
           name: details.name,
           place_id: details.place_id,
-          formatted_address: details.formatted_address || details.vicinity || "No address available",
-          types: details.types || [],
-          rating: (details as any).rating || 0,
-          price_level: (details as any).price_level || 0,
+          formatted_address: details.formatted_address ?? details.vicinity ?? "No address available",
+          types: details.types ?? [],
+          rating: (details as any).rating ?? 0,
+          price_level: (details as any).price_level ?? 0,
           coordinate: {
             latitude: lat,
             longitude: lng,
           },
           // For compatibility with building data format
-          Address: details.formatted_address || details.vicinity || "No address available",
+          Address: details.formatted_address ?? details.vicinity ?? "No address available",
           Building_Long_Name: details.name,
         }
       }]
