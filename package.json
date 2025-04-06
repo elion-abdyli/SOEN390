@@ -5,35 +5,10 @@
   "scripts": {
     "start": "expo start",
     "android": "GRADLE_OPTS='-Xmx4096m -XX:MaxMetaspaceSize=1024m' expo run:android",
+    "coverage": "jest --coverage",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "jest --config jest.config.js"
-  },
-  "jest": {
-    "preset": "jest-expo",
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "components/InputComponents/**/*.{js,jsx,ts,tsx}",
-      "components/MapComponents/**/*.{js,jsx,ts,tsx}",
-      "screens/**/*.{js,jsx,ts,tsx}",
-      "services/**/*.{js,jsx,ts,tsx}",
-      "navigation/**/*.{js,jsx,ts,tsx}",
-      "hooks/**/*.{js,jsx,ts,tsx}",
-      "!**/node_modules/**",
-      "!**/setupTests.js",
-      "!**/coverage/**"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "moduleNameMapper": {
-      "^@/constants/GoogleKey$": "<rootDir>/__mocks__/constants/GoogleKey.js",
-      "^@/(.*)$": "<rootDir>/$1"
-    },
-    "setupFiles": [
-      "<rootDir>/navigation/setupTests.js"
-    ]
+    "test": "jest"
   },
   "overrides": {
     "@testing-library/react-hooks": {
