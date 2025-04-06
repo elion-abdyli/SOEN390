@@ -1,0 +1,30 @@
+{
+"type": "FeatureCollection",
+"name": "mb-2-rooms-pois",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 0, "id": "0", "Code": "MB2ELEV", "Type": "Elevator" }, "geometry": { "type": "Point", "coordinates": [ -73.579063237628972, 45.495257998316141 ] } },
+{ "type": "Feature", "properties": { "fid": 1, "id": "1", "Code": "MB2ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.578837062357891, 45.495300631360486 ] } },
+{ "type": "Feature", "properties": { "fid": 2, "id": "2", "Code": "MB2EXIT", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.578676458909101, 45.495166736847082 ] } },
+{ "type": "Feature", "properties": { "fid": 3, "id": "3", "Code": "MB2EXIT", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.57914306419525, 45.495236681781869 ] } },
+{ "type": "Feature", "properties": { "fid": 4, "id": "4", "Code": "MB2EXIT", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.579295114797631, 45.495330607700474 ] } },
+{ "type": "Feature", "properties": { "fid": 5, "id": "5", "Code": "MB2.210", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578934944933167, 45.49527931484235 ] } },
+{ "type": "Feature", "properties": { "fid": 6, "id": "6", "Code": "MB2.330", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578815205083785, 45.495084801241561 ] } },
+{ "type": "Feature", "properties": { "fid": 7, "id": "7", "Code": "MB2.420", "Type": "Male Bathroom" }, "geometry": { "type": "Point", "coordinates": [ -73.579205785068723, 45.495305294347752 ] } },
+{ "type": "Feature", "properties": { "fid": 8, "id": "8", "Code": "MB2.410", "Type": "Female Bathroom" }, "geometry": { "type": "Point", "coordinates": [ -73.579163971153051, 45.495342598231993 ] } },
+{ "type": "Feature", "properties": { "fid": 9, "id": "9", "Code": "MB2.145", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578985311695234, 45.49537923595139 ] } },
+{ "type": "Feature", "properties": { "fid": 10, "id": "10", "Code": "MB2.135", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579038529406063, 45.495405215410692 ] } },
+{ "type": "Feature", "properties": { "fid": 11, "id": "11", "Code": "MB2.115", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579129759767511, 45.495447848343595 ] } },
+{ "type": "Feature", "properties": { "fid": 12, "id": "12", "Code": "MB2.105", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579240946770526, 45.495485152133405 ] } },
+{ "type": "Feature", "properties": { "fid": 13, "id": "13", "Code": "MB2.401", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579307468909079, 45.495400552431704 ] } },
+{ "type": "Feature", "properties": { "fid": 14, "id": "14", "Code": "MB2.465", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579413904330778, 45.495345928934739 ] } },
+{ "type": "Feature", "properties": { "fid": 15, "id": "15", "Code": "MB2.455", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579497532162094, 45.495277982559685 ] } },
+{ "type": "Feature", "properties": { "fid": 16, "id": "16", "Code": "MB2.445", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579410103065712, 45.495221360517846 ] } },
+{ "type": "Feature", "properties": { "fid": 17, "id": "17", "Code": "MB2.435", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579278959421117, 45.495200043969703 ] } },
+{ "type": "Feature", "properties": { "fid": 18, "id": "18", "Code": "MB2.428", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579232393924144, 45.495273985711535 ] } },
+{ "type": "Feature", "properties": { "fid": 19, "id": "19", "Code": "MB2.273", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578680260174124, 45.495073476798879 ] } },
+{ "type": "Feature", "properties": { "fid": 20, "id": "20", "Code": "MB2.275", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578704018080757, 45.495051494050742 ] } },
+{ "type": "Feature", "properties": { "fid": 21, "id": "21", "Code": "MB2.279", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578731577252455, 45.49503350815953 ] } },
+{ "type": "Feature", "properties": { "fid": 22, "id": "22", "Code": "MB2.285", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.57880665223739, 45.495044166466123 ] } }
+]
+}
