@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-import { View, Alert, ScrollView, Dimensions, Text, Modal, TouchableOpacity } from "react-native";
+import { View, Alert, Dimensions, Text, Modal, TouchableOpacity } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker } from "react-native-maps";
 
 import { DefaultMapStyle } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute , CommonActions} from "@react-navigation/native";
 import { FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
 import { Button } from "react-native-paper";
 import * as Location from "expo-location";
@@ -18,8 +18,6 @@ import {
 } from "@/constants/MapsConstants";
 import { AutocompleteSearchWrapper } from "@/components/InputComponents/AutoCompleteSearchWrapper";
 import { MarkerInfoBox } from "@/components/MapComponents/MarkerInfoBox";
-import { CommonActions } from '@react-navigation/native';
-
 import { directionModalStyles, MapExplorerScreenStyles } from "@/Styles/MapExplorerScreenStyles";
 import { searchPlaces } from "@/services/PlacesService";
 
