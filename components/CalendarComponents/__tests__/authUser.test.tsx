@@ -1,7 +1,7 @@
 // __tests__/authUser.test.tsx
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import AuthUser from '@/components/CalendarComponents/authUser';
+import AuthUser from '@/components/CalendarComponents/ClendarEvents';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
