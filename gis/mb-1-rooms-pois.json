@@ -1,0 +1,21 @@
+{
+"type": "FeatureCollection",
+"name": "mb-1-rooms-pois",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 0, "id": "0", "Code": "MB1.210", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.578908484564622, 45.495266887142108 ] } },
+{ "type": "Feature", "properties": { "fid": 1, "id": "1", "Code": "mb1EXIT", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.578627190950087, 45.495144316979122 ] } },
+{ "type": "Feature", "properties": { "fid": 2, "id": "2", "Code": "mb1ELEV", "Type": "ELEV" }, "geometry": { "type": "Point", "coordinates": [ -73.579050081688166, 45.49525756116082 ] } },
+{ "type": "Feature", "properties": { "fid": 3, "id": "3", "Code": "MB1.315", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579072889278549, 45.495176957972504 ] } },
+{ "type": "Feature", "properties": { "fid": 4, "id": "4", "Code": "MB1.309", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579112802561681, 45.4951982745294 ] } },
+{ "type": "Feature", "properties": { "fid": 5, "id": "5", "Code": "MB1.301", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579218287667146, 45.49524956746135 ] } },
+{ "type": "Feature", "properties": { "fid": 6, "id": "6", "Code": "mb1EXIT", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.579137510784577, 45.495233580058994 ] } },
+{ "type": "Feature", "properties": { "fid": 7, "id": "7", "Code": "MB1.130", "Type": "Desk" }, "geometry": { "type": "Point", "coordinates": [ -73.579173622802656, 45.495382129497678 ] } },
+{ "type": "Feature", "properties": { "fid": 8, "id": "8", "Code": "MB1.410", "Type": "Female Bathroom" }, "geometry": { "type": "Point", "coordinates": [ -73.579202132290618, 45.495320844574941 ] } },
+{ "type": "Feature", "properties": { "fid": 9, "id": "9", "Code": "MB1.430", "Type": "Male Bathroom" }, "geometry": { "type": "Point", "coordinates": [ -73.579279107908121, 45.495274880839126 ] } },
+{ "type": "Feature", "properties": { "fid": 10, "id": "10", "Code": "MB1.437", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579325673405094, 45.495197608387116 ] } },
+{ "type": "Feature", "properties": { "fid": 11, "id": "11", "Code": "mb1EXIT", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.579415953450308, 45.495276879263209 ] } },
+{ "type": "Feature", "properties": { "fid": 12, "id": "12", "Code": "mb1ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.579091895603852, 45.495432756122675 ] } },
+{ "type": "Feature", "properties": { "fid": 13, "id": "13", "Code": "mb1ENTR", "Type": "Entrance" }, "geometry": { "type": "Point", "coordinates": [ -73.578553066281387, 45.495189614679141 ] } }
+]
+}

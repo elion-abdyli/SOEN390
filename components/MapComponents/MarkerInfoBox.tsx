@@ -21,9 +21,9 @@ export const MarkerInfoBox: React.FC<MarkerInfoBoxProps> = ({
     onClose,
     onDirections,
 }) => {
-    const displayProperties = properties || {};
+    const displayProperties = properties ?? {};
 
-    const { coordinate: _, ...displayProps } = displayProperties;
+    const { coordinate: _ } = displayProperties;
 
     return (
         <View style={MarkerInfoBoxStyles.overlay}>
@@ -31,7 +31,7 @@ export const MarkerInfoBox: React.FC<MarkerInfoBoxProps> = ({
                 <ScrollView style={MarkerInfoBoxStyles.scrollView}>
                     <View style={MarkerInfoBoxStyles.coordinateContainer}>
                         <Text style={MarkerInfoBoxStyles.title}>
-                            {title || 'Selected Location'}
+                            {title ?? 'Selected Location'}
                         </Text>
 
                         <>

@@ -71,7 +71,7 @@
 { "type": "Feature", "properties": { "id": null, "Code": "H802", "Type": "Female Bathroom" }, "geometry": { "type": "Point", "coordinates": [ -73.578651351576454, 45.497280671763605 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "H892", "Type": "???" }, "geometry": { "type": "Point", "coordinates": [ -73.57874850557468, 45.497258389226367 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "H898", "Type": "EXIT" }, "geometry": { "type": "Point", "coordinates": [ -73.578660638355686, 45.497342011286861 ] } },
-{ "type": "Feature", "properties": { "id": null, "Code": "ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.578872805542986, 45.49727441262479 ] } },
+{ "type": "Feature", "properties": { "id": null, "Code": "hall8ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.578872805542986, 45.49727441262479 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.578882092322218, 45.497262395076376 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.578939956100584, 45.497309964523829 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "ESCA", "Type": "Escalator" }, "geometry": { "type": "Point", "coordinates": [ -73.578952100350349, 45.49729644479023 ] } },
@@ -92,7 +92,6 @@
 { "type": "Feature", "properties": { "id": null, "Code": "H840", "Type": "???" }, "geometry": { "type": "Point", "coordinates": [ -73.57894031328442, 45.497337880259806 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "H838-1", "Type": "???" }, "geometry": { "type": "Point", "coordinates": [ -73.579042825039878, 45.497351149618247 ] } },
 { "type": "Feature", "properties": { "id": null, "Code": "H838", "Type": "Class" }, "geometry": { "type": "Point", "coordinates": [ -73.579065684804178, 45.497374183214149 ] } },
-{ "type": "Feature", "properties": { "id": null, "Code": "ELEV", "Type": "Elevator" }, "geometry": { "type": "Point", "coordinates": [ -73.578731003567654, 45.497300325454852 ] } },
-{ "type": "Feature", "properties": { "id": null, "Code": "ELEV", "Type": "Elevator" }, "geometry": { "type": "Point", "coordinates": [ -73.578719573685504, 45.497311842264374 ] } }
+{ "type": "Feature", "properties": { "id": null, "Code": "hall8ELEV", "Type": "Elevator" }, "geometry": { "type": "Point", "coordinates": [ -73.578731003567654, 45.497300325454852 ] } }
 ]
 }

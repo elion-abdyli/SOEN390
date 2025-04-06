@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, View, Text, Dimensions } from "react-native";
+import { View, Text , TouchableOpacity} from "react-native";
 import MapView, {
   PROVIDER_GOOGLE,
   Marker,
-  Region,
   LatLng,
   Callout,
 } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import CustomButton from "../components/InputComponents/Buttons";
 import { DirectionsScreenStyles } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,7 +16,7 @@ import "react-native-get-random-values";
 import { useRoute } from "@react-navigation/native";
 import { retrieveRoutes } from "@/services/DirectionService";
 import { findNextShuttle } from "@/services/ShuttleService";
-import { TouchableOpacity } from "react-native";
+import {  } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
@@ -31,7 +29,6 @@ export default function DirectionsScreen() {
   const mapRef = useRef<MapView | null>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
-  const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -262,17 +259,17 @@ export default function DirectionsScreen() {
     traceRoute();
   }, [transportMode]);
 
-  const setWalking = () => {
-    setTransportMode("WALKING");
-  };
+  // const setWalking = () => {
+  //   setTransportMode("WALKING");
+  // };
 
-  const setDriving = () => {
-    setTransportMode("DRIVING");
-  };
+  // const setDriving = () => {
+  //   setTransportMode("DRIVING");
+  // };
 
-  const setTransit = () => {
-    setTransportMode("TRANSIT");
-  };
+  // const setTransit = () => {
+  //   setTransportMode("TRANSIT");
+  // };
 
   useEffect(() => {
     if (destination) {
@@ -284,7 +281,6 @@ export default function DirectionsScreen() {
 
   useEffect(() => {
     if (directionsRoute) {
-      //console.log("Route distance and duration:", distance, "m", duration, "min");
       console.log("Beginning Direction Rendering"); // proof that state changed and rendering should begin, if not it is an API or rendering issue
     }
   }, [directionsRoute]);

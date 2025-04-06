@@ -2,7 +2,7 @@ Subject ID,Test Area,Task Description,Time Taken ,Success (Y/N),Errors Encounter
 6,Campus Map Exploration,Task 1: Switch between SGW and Loyola using the toggle button.,2 seconds,Y,none,easy to switch
 6,Campus Map Exploration,Task 2: Locate a specific building on the campus map.,12 seconds,Y,none,found it pretty easily
 6,Campus Map Exploration,Task 3: View pop-up information for a building.,2 seconds,Y,none,info loaded clearly
-6,Outdoor Directions,"Task 1: Select a start and destination building by clicking (Start JMSB, go to Hall).",14 seconds,Y,none,very good
+6,Outdoor Directions,"Task 1: Select a start and destination building by clicking (Start JMSB, go to Hall).",14 seconds,Y,none,Instructions were slightly confusing at first glance
 6,Outdoor Directions,"Task 2: Select a start and destination building by typing (Start JMSB, go to Hall).",24 seconds,Y,none,very helpful to type
 6,Outdoor Directions,"Task 3: Generate directions using multiple transport options (walk, car, public transport).",5 seconds,Y,none,great that all transport types are supported
 6,Outdoor Directions,Task 4: Get directions from SGW to Loyola and vice versa.,35 seconds,Y,none,smooth direction
