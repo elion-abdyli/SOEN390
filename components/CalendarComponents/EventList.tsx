@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { Card } from 'react-native-paper';
 import { EventListStyles } from '@/Styles/CalendarStyles';
@@ -25,6 +25,9 @@ const EventList: React.FC<EventListProps> = ({
   error = null
 }) => {
 
+useEffect(()=>{
+console.log("this is console log" , events)
+},[events])
 
 
   // Format date for display
@@ -43,10 +46,9 @@ const EventList: React.FC<EventListProps> = ({
   };
 
   // Event card component
-  const EventCard: React.FC<{ event: CalendarEventInterface }> = ({ event }) => (
+  const EventCard: React.FC<{ event }> = ({ event }) => (
 
     <Card style={EventListStyles.card} mode="outlined">
-      {console.log("................... ", event)}
       <Card.Content>
         <Text style={EventListStyles.eventTitle}>{event.title}</Text>
         <Text style={EventListStyles.eventTime}>{event.time}</Text>
@@ -79,6 +81,7 @@ const EventList: React.FC<EventListProps> = ({
       </Text>
       {console.log(events.length > 0)}
       <ScrollView style={EventListStyles.eventsScrollView}>
+        {console.log(events)}
         {events.length > 0 ? (
           events.map(event => (
             <EventCard key={event.id} event={event} />

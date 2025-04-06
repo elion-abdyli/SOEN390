@@ -15,8 +15,6 @@
     name: string;
   }
 
-  
-
 
 
   export const groupEventsByDate = (events: CalendarEventInterface[]): EventsType => {
@@ -135,6 +133,7 @@
     const [markedDates, setMarkedDates] = useState({});
     const [activeCalendar, setActiveCalendar] = useState<string | null>(null);
     const [calendars, setCalendars] = useState<CalendarData[]>([]);
+    const [calendarEvents, setCalendarEvents] = useState<CalendarEventInterface[]>([]); // State for holding events
     const [groupedEvents, setGroupedEvents] = useState<EventsType>({});
 
     useEffect(() => {
@@ -247,6 +246,7 @@
               }}
               enableSwipeMonths={true}
             />
+            {console.log("checking out value:", groupedEvents[selectedDate])}
             <View>
             <EventList
               date={selectedDate}
