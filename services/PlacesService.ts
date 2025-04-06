@@ -53,19 +53,19 @@ export const searchPlaces = async (
 
     const json = await response.json();
 
-    if (!json ?? !json.results ?? !Array.isArray(json.results)) {
+    if (json == null || json.results == null || !Array.isArray(json?.results)) {
       throw new PlacesAPIError("Invalid API response structure");
     }
-
-    if (json.results.length === 0 ?? json.status === "ZERO_RESULTS") {
+    
+    if ((json?.results ?? []).length === 0 || (json?.status ?? "") === "ZERO_RESULTS") {
       return { type: "FeatureCollection", features: [] }; // No POIs found
     }
-
+    
     const features = json.results.map((item: any) => {
       // Handle differences between textsearch and nearbysearch responses
       let lat, lng;
       
-      if (item.geometry && item.geometry.location) {
+      if (item?.geometry?.location) {
         lat = item.geometry.location.lat;
         lng = item.geometry.location.lng;
       } else if (item.latitude && item.longitude) {
