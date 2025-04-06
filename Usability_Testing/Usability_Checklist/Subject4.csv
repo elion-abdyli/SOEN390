@@ -1,0 +1,16 @@
+Subject ID,Test Area,Task Description,Time Taken,Success (Y/N),Errors Encountered,Feedback
+4,Campus Map Exploration,Task 1: Switch between SGW and Loyola using the toggle button.,3 seconds,Y,None,map was responsive
+4,Campus Map Exploration,Task 2: Locate a specific building on the campus map.,15 seconds,Y,None,building search worked instantly
+4,Campus Map Exploration,Task 3: View pop-up information for a building.,4 seconds,Y,None,popped up instantly
+4,Outdoor Directions,"Task 1: Select a start and destination building by clicking (Start JMSB, go to Hall).",17 seconds,Y,None,Needed a hint to figure out how to select locations
+4,Outdoor Directions,"Task 2: Select a start and destination building by typing (Start JMSB, go to Hall).",13 seconds,Y,None,auto suggestions were great
+4,Outdoor Directions,"Task 3: Generate directions using multiple transport options (walk, car, public transport).",4 seconds,Y,None,multi-transport very useful
+4,Outdoor Directions,Task 4: Get directions from SGW to Loyola and vice versa.,12 seconds,Y,None,clear campus transition
+4,Outdoor Directions,"Task 5: Utilize the Concordia Shuttle Service in directions (SGW to Loyola, Loyola to SGW).",5 seconds,Y,None,good shuttle toggle
+4,Directions to Next Class,Task 1: Get directions from Hall 501 to Hall 1011.,N/A,N,,
+4,Points of Interest,"Task 1: Find the nearest points of interest on campus (restaurants, coffee shops).",7 seconds,Y,None,great suggestions
+4,Points of Interest,Task 2: Get directions to Tim Hortons.,19 seconds,Y,None,worked well
+4,Metrics to Track,Time Taken (mins):,1 minute 39 seconds,,,
+4,Metrics to Track,Success Rate: (Y/N),,83%,,
+4,Metrics to Track,Errors Encountered:,,,None,
+4,Metrics to Track,Satisfaction Rating (1-5):,,,,5

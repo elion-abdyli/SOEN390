@@ -59,13 +59,13 @@ function _importBuildings()
   let H_building = new Building("H");
   {
     {
-      let H1_floorPlan = require("@/gis/hall-8-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
+      let H1_floorPlan = require("@/gis/hall-1-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let H1_pois = require("@/gis/hall-1-rooms-pois.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let floorH1 = new Floor("H1", H1_floorPlan, H1_pois);
       H_building.floors["H1"] = floorH1;
     }
     {
-      let H2_floorPlan = require("@/gis/hall-8-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
+      let H2_floorPlan = require("@/gis/hall-2-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let H2_pois = require("@/gis/hall-2-rooms-pois.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let floorH2 = new Floor("H2", H2_floorPlan, H2_pois);
       H_building.floors["H2"] = floorH2;
@@ -88,19 +88,20 @@ function _importBuildings()
   let MB_building = new Building("MB");
   {
     {
-      let MB1_floorPlan = require("@/gis/hall-8-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
+      let MB1_floorPlan = require("@/gis/mb-1-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let MB1_pois = require("@/gis/mb-1-rooms-pois.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let floorMB1 = new Floor("MB1", MB1_floorPlan, MB1_pois);
       MB_building.floors["MB1"] = floorMB1;
     }
     {
-      let MB2_floorPlan = require("@/gis/hall-8-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
+      let MB2_floorPlan = require("@/gis/mb-2-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let MB2_pois = require("@/gis/mb-2-rooms-pois.json") as FeatureCollection<Geometry, GeoJsonProperties>;
       let floorMB2 = new Floor("MB2", MB2_floorPlan, MB2_pois);
       MB_building.floors["MB2"] = floorMB2;
     }
   }
   buildings["MB"] = MB_building;
+
 }
 
 _fullImport();

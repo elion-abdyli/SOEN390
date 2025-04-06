@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, View, Text, Dimensions } from "react-native";
+import { View, Text , TouchableOpacity} from "react-native";
 import MapView, {
   PROVIDER_GOOGLE,
   Marker,
-  Region,
   LatLng,
   Callout,
   Polyline,
@@ -11,16 +10,15 @@ import MapView, {
 } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import CustomButton from "../components/InputComponents/Buttons";
 import { DirectionsScreenStyles } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SGW_CAMPUS } from "./MapExplorerScreen";
+import SGW_CAMPUS from "./MapExplorerScreen";
 import "react-native-get-random-values";
 import { useRoute } from "@react-navigation/native";
-import { retrieveRoutes } from "@/services/DirectionService.ts";
-import { findNextShuttle } from "@/services/ShuttleService.ts";
-import { TouchableOpacity } from "react-native";
+import { retrieveRoutes } from "@/services/DirectionService";
+import { findNextShuttle } from "@/services/ShuttleService";
+import {  } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
@@ -34,7 +32,7 @@ import {
   outdoorToIndoor 
 } from "@/services/IndoorDirService";
 
-const googleMapsKey = GOOGLE_MAPS_API_KEY;
+// const googleMapsKey = GOOGLE_MAPS_API_KEY;
 const BASE_PADDING = 50;
 
 export default function DirectionsScreen() {
@@ -44,7 +42,6 @@ export default function DirectionsScreen() {
   const [destiProperties, setRouteRequestProperties] = useState<any>(null);
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
-  const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -135,14 +132,16 @@ export default function DirectionsScreen() {
 
   useEffect(() => {
     if (origin && destination) {
-      const extraPadding = origin && destination ? 100 : 0;  // extra padding to fit markers on screen properly
+      const extraPadding = origin && destination ? 100 : 0; // extra padding to fit markers on screen properly
       const padding = BASE_PADDING + extraPadding - 40;
 
       mapRef.current?.fitToCoordinates([origin, destination], {
-        edgePadding: {top: padding,
-            right: padding,
-            bottom: padding,
-            left: padding},
+        edgePadding: {
+          top: padding,
+          right: padding,
+          bottom: padding,
+          left: padding,
+        },
         animated: true,
       });
 
@@ -180,8 +179,9 @@ export default function DirectionsScreen() {
 
     const zoomLevel = details.types.includes("country") ? 5 : 0.02;
 
-    if ((origin && !destination) || (!origin && destination)) {  // if only one location marker is selected
-        moveTo(position, zoomLevel);  // zoom in onto it
+    if ((origin && !destination) || (!origin && destination)) {
+      // if only one location marker is selected
+      moveTo(position, zoomLevel); // zoom in onto it
     }
   };
 
@@ -258,64 +258,83 @@ export default function DirectionsScreen() {
     }
   };
 
-const setShuttleRoute = async () => {
-    console.log("Attempting to use shuttle service.");  // Initial log to confirm function execution
+  const setShuttleRoute = async () => {
+    console.log("Attempting to use shuttle service."); // Initial log to confirm function execution
 
     try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-            Alert.alert("Permission to access location was denied");  // Notify user if permission is denied
-            return;
-        }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission to access location was denied"); // Notify user if permission is denied
+        return;
+      }
 
-        const location = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Highest,
-            maximumAge: 10000,  // Allow use of recent location within 10s
-            timeout: 5000,  // Fail if location isn't retrieved within 5s
-        });
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Highest,
+        maximumAge: 10000, // Allow use of recent location within 10s
+        timeout: 5000, // Fail if location isn't retrieved within 5s
+      });
 
-        const userLocation: LatLng = {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-        };
+      const userLocation: LatLng = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
 
-        console.log("User's current location: ", userLocation);  // Debugging
+      console.log("User's current location: ", userLocation); // Debugging
 
-        // Get estimated time to each campus from user's location
-        console.log("Fetching trip duration to Hall Building...");
-        const timeToHallBuilding = await getTripDuration(userLocation, HALL_BUILDING, GOOGLE_MAPS_API_KEY);
+      // Get estimated time to each campus from user's location
+      console.log("Fetching trip duration to Hall Building...");
+      const timeToHallBuilding = await getTripDuration(
+        userLocation,
+        HALL_BUILDING,
+        GOOGLE_MAPS_API_KEY
+      );
 
-        console.log("Fetching trip duration to Loyola Campus...");
-        const timeToLoyolaCampus = await getTripDuration(userLocation, LOYOLA_CAMPUS, GOOGLE_MAPS_API_KEY);
+      console.log("Fetching trip duration to Loyola Campus...");
+      const timeToLoyolaCampus = await getTripDuration(
+        userLocation,
+        LOYOLA_CAMPUS,
+        GOOGLE_MAPS_API_KEY
+      );
 
-        console.log("Time to Loyola: " + timeToLoyolaCampus + ", time to Hall: " + timeToHallBuilding);
+      console.log(
+        "Time to Loyola: " +
+          timeToLoyolaCampus +
+          ", time to Hall: " +
+          timeToHallBuilding
+      );
 
-        if (timeToHallBuilding != null && timeToLoyolaCampus != null) {  // both times need to exist
-            if (timeToHallBuilding <= 5 || timeToLoyolaCampus <= 5) {  // Shuttle only usable if either campus is ≤ 5 min away
-                if (timeToHallBuilding < timeToLoyolaCampus) {  // HALL is closer
-                    setDestination(LOYOLA_CAMPUS);  // If Hall is closer, set Loyola as destination
-                    console.log("Hall is closer, setting destination to Loyola.");
-                } else {  // LOYOLA is closer
-                    setDestination(HALL_BUILDING);  // If Loyola is closer, set Hall as destination
-                    console.log("Loyola is closer, setting destination to Hall.");
-                }
+      if (timeToHallBuilding != null && timeToLoyolaCampus != null) {
+        // both times need to exist
+        if (timeToHallBuilding <= 5 || timeToLoyolaCampus <= 5) {
+          // Shuttle only usable if either campus is ≤ 5 min away
+          if (timeToHallBuilding < timeToLoyolaCampus) {
+            // HALL is closer
+            setDestination(LOYOLA_CAMPUS); // If Hall is closer, set Loyola as destination
+            console.log("Hall is closer, setting destination to Loyola.");
+          } else {
+            // LOYOLA is closer
+            setDestination(HALL_BUILDING); // If Loyola is closer, set Hall as destination
+            console.log("Loyola is closer, setting destination to Hall.");
+          }
 
-                setOrigin(userLocation);  // Set user's current location as the trip origin
-                setTransportMode("DRIVING");  // Mode is driving since the shuttle is a driving type vehicle
-                setShuttleValid(true);  // Set shuttle valid to true since shuttle route exists
+          setOrigin(userLocation); // Set user's current location as the trip origin
+          setTransportMode("DRIVING"); // Mode is driving since the shuttle is a driving type vehicle
+          setShuttleValid(true); // Set shuttle valid to true since shuttle route exists
 
-                console.log("Beginning shuttle service...");
-                await traceRoute();  // Start navigation based on the new origin and destination
-            } else {
-                console.log("Too far from both campuses to use Shuttle Service.");  // User is too far from either campus to use the shuttle
-                setShuttleValid(false);
-            }
+          console.log("Beginning shuttle service...");
+          await traceRoute(); // Start navigation based on the new origin and destination
         } else {
-            console.log("One or both of travel times are null.");  // Travel times cannot be retrieved and no error code was raised
+          console.log("Too far from both campuses to use Shuttle Service."); // User is too far from either campus to use the shuttle
+          setShuttleValid(false);
         }
+      } else {
+        console.log("One or both of travel times are null."); // Travel times cannot be retrieved and no error code was raised
+      }
     } catch (error) {
-        console.error("Error getting location:", error);  // If current location cannot be retrieved
-        Alert.alert("Unable to get your location. Please enable location services.");
+      console.error("Error getting location:", error); // If current location cannot be retrieved
+      Alert.alert(
+        "Unable to get your location. Please enable location services."
+      );
     }
   };
 
@@ -323,17 +342,17 @@ const setShuttleRoute = async () => {
     traceRoute();
   }, [transportMode]);
 
-  const setWalking = () => {
-    setTransportMode("WALKING");
-  };
+  // const setWalking = () => {
+  //   setTransportMode("WALKING");
+  // };
 
-  const setDriving = () => {
-    setTransportMode("DRIVING");
-  };
+  // const setDriving = () => {
+  //   setTransportMode("DRIVING");
+  // };
 
-  const setTransit = () => {
-    setTransportMode("TRANSIT");
-  };
+  // const setTransit = () => {
+  //   setTransportMode("TRANSIT");
+  // };
 
   useEffect(() => {
     if (destination) {
@@ -345,7 +364,6 @@ const setShuttleRoute = async () => {
 
   useEffect(() => {
     if (directionsRoute) {
-      //console.log("Route distance and duration:", distance, "m", duration, "min");
       console.log("Beginning Direction Rendering"); // proof that state changed and rendering should begin, if not it is an API or rendering issue
     }
   }, [directionsRoute]);
@@ -374,31 +392,32 @@ const setShuttleRoute = async () => {
         showsBuildings={false}
       >
         {origin && (
-  <Marker 
-    coordinate={origin} 
-    pinColor="green" // Green for origin
-  >
-    <Callout>
-      <View style={DirectionsScreenStyles.calloutContainer}>
-        <Text style={DirectionsScreenStyles.calloutText}>Start</Text>
-      </View>
-    </Callout>
-  </Marker>
-)}
+          <Marker
+            coordinate={origin}
+            pinColor="green" // Green for origin
+          >
+            <Callout>
+              <View style={DirectionsScreenStyles.calloutContainer}>
+                <Text style={DirectionsScreenStyles.calloutText}>Start</Text>
+              </View>
+            </Callout>
+          </Marker>
+        )}
 
-{destination && (
-  <Marker 
-    coordinate={destination} 
-    pinColor="red" // Red for destination
-  >
-    <Callout>
-      <View style={DirectionsScreenStyles.calloutContainer}>
-        <Text style={DirectionsScreenStyles.calloutText}>Destination</Text>
-      </View>
-
-    </Callout>
-  </Marker>
-)}
+        {destination && (
+          <Marker
+            coordinate={destination}
+            pinColor="red" // Red for destination
+          >
+            <Callout>
+              <View style={DirectionsScreenStyles.calloutContainer}>
+                <Text style={DirectionsScreenStyles.calloutText}>
+                  Destination
+                </Text>
+              </View>
+            </Callout>
+          </Marker>
+        )}
 
 {indoorPaths1 && 
 indoorPaths1.length > 0 && 

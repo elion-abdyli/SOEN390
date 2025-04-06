@@ -1,0 +1,16 @@
+{
+    "features": [
+      {
+        "properties": { "Code": "MB101" },
+        "geometry": { "coordinates": [1, 1] }
+      },
+      {
+        "properties": { "Code": "MB1ELEV" },
+        "geometry": { "coordinates": [1.5, 1.5] }
+      },
+      {
+        "properties": { "Code": "MB1ESCA" },
+        "geometry": { "coordinates": [1.2, 1.2] }
+      }
+    ]
+  }

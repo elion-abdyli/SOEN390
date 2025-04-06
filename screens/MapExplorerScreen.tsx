@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-import { View, Alert, ScrollView, Dimensions, Text, Modal, TouchableOpacity } from "react-native";
+import { View, Alert, Dimensions, Text, Modal, TouchableOpacity } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker, Polyline } from "react-native-maps";
 
 import { DefaultMapStyle } from "@/Styles/MapStyles";
-import { CustomMarkersComponent } from "../components/MapComponents/MarkersComponent";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute , CommonActions} from "@react-navigation/native";
 import { FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
 import { Button, List } from "react-native-paper";
 import { Dropdown } from 'react-native-paper-dropdown';
@@ -21,25 +20,29 @@ import {
 } from "@/constants/MapsConstants";
 import { AutocompleteSearchWrapper } from "@/components/InputComponents/AutoCompleteSearchWrapper";
 import { MarkerInfoBox } from "@/components/MapComponents/MarkerInfoBox";
-import { CommonActions } from '@react-navigation/native';
-
 import { directionModalStyles, MapExplorerScreenStyles } from "@/Styles/MapExplorerScreenStyles";
 import { searchPlaces } from "@/services/PlacesService";
+import {
+  POI_MIN_ZOOM_LEVEL,
+  POI_MAX_ZOOM_LEVEL,
+  POI_RADIUS_MIN,
+  POI_RADIUS_MAX,
+  POI_ZOOM_REFRESH_THRESHOLD,
+  ZOOM_LEVEL_THRESHOLD,
+  BUILDING_MARKERS_ZOOM_THRESHOLD,
+  buildingMarkers,
+  buildingOutlines,
+  hall9RoomsPois,
+  hall9FloorPlan,
+  hall8RoomsPois,
+  hall8FloorPlan,
+} from "@/constants/MapExplorerScreen";
 import { routeToRoom, indoorToOutdoor, outdoorToIndoor } from "@/services/IndoorDirService";
 
 import { Building, Floor, getBuildingOutlines, getBuildingMarkers, getBuilding } from "@/services/GISImporterService";
 import { floor } from "lodash";
 
 const googleMapsKey = GOOGLE_MAPS_API_KEY;
-
-// Add constants at the top of the file, near other constants
-const POI_MIN_ZOOM_LEVEL = 12; // Minimum zoom level to show POIs (zoomed in)
-const POI_MAX_ZOOM_LEVEL = 19; // Maximum zoom level for POIs (very zoomed in)
-const POI_RADIUS_MIN = 500; // Minimum radius in meters
-const POI_RADIUS_MAX = 5000; // Maximum radius in meters
-const POI_ZOOM_REFRESH_THRESHOLD = 1.5; // How much zoom needs to change before refreshing POIs
-
-
 
 const markerImage = require("@/assets/images/marker.png");
 
@@ -135,7 +138,13 @@ const MapComponent = ({
       if(newBuilding)
       {
         setSelectedBuilding(newBuilding);
-        setSelectedFloor((Object.values(newBuilding.floors)[0]) as Floor);
+        const entries = Object.entries(newBuilding.floors);
+        if (entries.length > 0) {
+          const [key, floor] = entries[0];
+          setSelectedFloor(floor);
+        } else {
+          setSelectedFloor(null);
+        }
       }
       else
       {
@@ -197,7 +206,7 @@ const MapComponent = ({
         Longitude: userLocation?.longitude ?? 0,
       } : 
       {
-        Address: destination.Address || destination.Building_Long_Name || "Selected Location",
+        Address: destination.Address ?? destination.Building_Long_Name ?? "Selected Location",
         Latitude: destination.coordinate.latitude,
         Longitude: destination.coordinate.longitude,
         ClassroomCode: selectedProperties.Code || ""
@@ -279,6 +288,8 @@ const MapComponent = ({
     onRegionChangeComplete(region);
   };
 
+  const shouldSearch = currentSearchText && currentSearchText.trim() !== "";
+
   return (
     <>
     {renderDirectionModal()}
@@ -302,8 +313,8 @@ const MapComponent = ({
               latitude: feature.geometry.coordinates[1],
               longitude: feature.geometry.coordinates[0],
             }}
-            title={feature.properties.Building_Name || "POI"}
-            key={feature.properties.place_id || Math.random().toString()}
+            title={feature.properties.Building_Name ?? "POI"}
+            key={feature.properties.place_id ?? Math.random().toString()}
             pinColor="red"
            onPress={() => {
               handleMarkerPress(feature);
@@ -343,8 +354,7 @@ const MapComponent = ({
         {!searchCleared && 
           results.features && 
           shouldShowPOIs && 
-          currentSearchText && 
-          currentSearchText.trim() !== "" && 
+          shouldSearch &&
           results.features.length > 0 && (
           <Geojson
             geojson={results}
@@ -361,8 +371,7 @@ const MapComponent = ({
         {!searchCleared && 
           results.features && 
           shouldShowPOIs && 
-          currentSearchText && 
-          currentSearchText.trim() !== "" && 
+          shouldSearch &&
           results.features.length > 0 && 
           results.features.map((feature: any) => (
           <Marker
@@ -370,8 +379,8 @@ const MapComponent = ({
               latitude: feature.geometry.coordinates[1],
               longitude: feature.geometry.coordinates[0],
             }}
-            title={feature.properties.name || "POI"}
-            key={feature.properties.place_id || Math.random().toString()}
+            title={feature.properties.name ?? "POI"}
+            key={feature.properties.place_id ?? Math.random().toString()}
             pinColor="blue"
             onPress={() => {
               handleSearchResultPress({
@@ -400,7 +409,7 @@ const MapComponent = ({
       {showInfoBox && selectedCoordinate && selectedProperties && (
         <MarkerInfoBox
           coordinate={selectedCoordinate}
-          title={selectedProperties.Code || selectedProperties.Building_Name || selectedProperties.BuildingName || "Place"}
+          title={selectedProperties.Building_Name ?? selectedProperties.BuildingName ?? "Building"}
           properties={selectedProperties}
           onClose={() => {
             setShowInfoBox(false);
@@ -412,20 +421,6 @@ const MapComponent = ({
     </>
   );
 };
-
-// THIS IS NEVER USED - REMOVE IT
-// Define the type for the route parameters
-// type DirectionsRouteParams = {
-//   origin: {
-//     latitude: number;
-//     longitude: number;
-//   };
-//   destination: {
-//     Address: string;
-//     Latitude: number;
-//     Longitude: number;
-//   };
-// };
 
 export default function MapExplorerScreen() {
   const mapRef = useRef<MapView | null>(null);
@@ -444,7 +439,13 @@ export default function MapExplorerScreen() {
   const [expanded, setExpanded] = useState(false);
   const route = useRoute<{ key: string; name: string; params: RouteParams }>();
   const { origin: originParam, destination: destinationParam } =
-    route.params || {};
+    route.params ?? {};
+  const [visibleLayers, setVisibleLayers] = useState({
+    hall9RoomsPois: true,
+    hall9FloorPlan: true,
+    hall8RoomsPois: true,
+    hall8FloorPlan: true,
+  });
   const navi = useNavigation();
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
@@ -530,7 +531,7 @@ export default function MapExplorerScreen() {
     // Add effect to log results when they change
     useEffect(() => {
       console.log("Results state updated:", results);
-      console.log("Results has features:", results?.features?.length || 0);
+      console.log("Results has features:", results?.features?.length ?? 0);
     }, [results]);
 
   useEffect(() => {

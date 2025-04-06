@@ -49,3 +49,10 @@ constants/GoogleKey.ts
 
 .vscode/
 /.vscode
+
+/yarn.lock
+
+#coverage folder
+coverage/
+android/app/build/
+android/app/src/main/AndroidManifest.xml
