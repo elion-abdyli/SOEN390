@@ -20,33 +20,29 @@ import { AutocompleteSearchWrapper } from "@/components/InputComponents/AutoComp
 import { MarkerInfoBox } from "@/components/MapComponents/MarkerInfoBox";
 import { directionModalStyles, MapExplorerScreenStyles } from "@/Styles/MapExplorerScreenStyles";
 import { searchPlaces } from "@/services/PlacesService";
+import {
+  POI_MIN_ZOOM_LEVEL,
+  POI_MAX_ZOOM_LEVEL,
+  POI_RADIUS_MIN,
+  POI_RADIUS_MAX,
+  POI_ZOOM_REFRESH_THRESHOLD,
+  ZOOM_LEVEL_THRESHOLD,
+  BUILDING_MARKERS_ZOOM_THRESHOLD,
+  buildingMarkers,
+  buildingOutlines,
+  hall9RoomsPois,
+  hall9FloorPlan,
+  hall8RoomsPois,
+  hall8FloorPlan,
+} from "@/constants/MapExplorerScreen";
 
 const googleMapsKey = GOOGLE_MAPS_API_KEY;
-
-// Add constants at the top of the file, near other constants
-const POI_MIN_ZOOM_LEVEL = 12; // Minimum zoom level to show POIs (zoomed in)
-const POI_MAX_ZOOM_LEVEL = 19; // Maximum zoom level for POIs (very zoomed in)
-const POI_RADIUS_MIN = 500; // Minimum radius in meters
-const POI_RADIUS_MAX = 5000; // Maximum radius in meters
-const POI_ZOOM_REFRESH_THRESHOLD = 1.5; // How much zoom needs to change before refreshing POIs
-
-const buildingMarkers = require("@/gis/building-markers.json") as FeatureCollection<Geometry, GeoJsonProperties>;
-const buildingOutlines = require("@/gis/building-outlines.json") as FeatureCollection<Geometry, GeoJsonProperties>;
-const hall9RoomsPois = require("@/gis/hall-9-rooms-pois.json") as FeatureCollection<Geometry, GeoJsonProperties>;
-const hall9FloorPlan = require("@/gis/hall-9-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
-const hall8RoomsPois = require("@/gis/hall-8-rooms-pois.json") as FeatureCollection<Geometry, GeoJsonProperties>;
-const hall8FloorPlan = require("@/gis/hall-8-floor-plan.json") as FeatureCollection<Geometry, GeoJsonProperties>;
-
-
-
 const markerImage = require("@/assets/images/marker.png");
 
 const handleRoomPoiPress = (event: any) => {
   console.log("Hall 9 room POI pressed:", event);
 };
 
-const ZOOM_LEVEL_THRESHOLD = 19;
-const BUILDING_MARKERS_ZOOM_THRESHOLD = 18;
 
 // Wrapper for the <MapView> component
 const MapComponent = ({
@@ -380,20 +376,6 @@ const MapComponent = ({
   );
 };
 
-// THIS IS NEVER USED - REMOVE IT
-// Define the type for the route parameters
-// type DirectionsRouteParams = {
-//   origin: {
-//     latitude: number;
-//     longitude: number;
-//   };
-//   destination: {
-//     Address: string;
-//     Latitude: number;
-//     Longitude: number;
-//   };
-// };
-
 export default function MapExplorerScreen() {
   const mapRef = useRef<MapView | null>(null);
   const [results, setResults] = useState<any>({});
@@ -590,12 +572,6 @@ export default function MapExplorerScreen() {
   const handleGoPress = () => {
     console.log("GO button pressed");
   };
-
-  // Functions are not being used, so they can be removed
-  // const handlePress = () => setExpanded(!expanded);
-  // const toggleLayerVisibility = (layer: string) => {
-  //   setVisibleLayers((prev) => ({ ...prev, [layer]: !prev[layer] }));
-  // };
 
   // Function to trigger a POI search with the current radius
   const searchPOIs = useCallback(() => {
