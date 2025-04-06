@@ -1,0 +1,16 @@
+{
+    "features": [
+      {
+        "properties": { "Code": "MB201" },
+        "geometry": { "coordinates": [2, 2] }
+      },
+      {
+        "properties": { "Code": "MB2ELEV" },
+        "geometry": { "coordinates": [2.5, 2.5] }
+      },
+      {
+        "properties": { "Code": "MB2ESCA" },
+        "geometry": { "coordinates": [2.2, 2.2] }
+      }
+    ]
+  }
