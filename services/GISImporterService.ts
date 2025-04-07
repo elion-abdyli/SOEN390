@@ -15,19 +15,16 @@ export class Floor {
   id: string;
   plan: FeatureCollection<Geometry, GeoJsonProperties>;
   roomPOIs: FeatureCollection<Geometry, GeoJsonProperties>;
-  //nav: FeatureCollection<Geometry, GeoJsonProperties>;
 
   constructor(
     id: string,
     plan:FeatureCollection<Geometry, GeoJsonProperties>, 
     roomPOIs:FeatureCollection<Geometry, GeoJsonProperties>, 
-    //nav:FeatureCollection<Geometry, GeoJsonProperties>
   )
   {
     this.id = id;
     this.plan = plan;
     this.roomPOIs = roomPOIs;
-    //this.nav = nav;
   }
 }
 

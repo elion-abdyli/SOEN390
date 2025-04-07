@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
 import { View, Alert, Dimensions, Text, Modal, TouchableOpacity } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region, Geojson, Circle, Marker, Polyline } from "react-native-maps";
 
 import { DefaultMapStyle } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
@@ -22,6 +22,20 @@ import { AutocompleteSearchWrapper } from "@/components/InputComponents/AutoComp
 import { MarkerInfoBox } from "@/components/MapComponents/MarkerInfoBox";
 import { directionModalStyles, MapExplorerScreenStyles } from "@/Styles/MapExplorerScreenStyles";
 import { searchPlaces } from "@/services/PlacesService";
+import { routeToRoom, indoorToOutdoor, outdoorToIndoor } from "@/services/IndoorDirService";
+
+import { Building, Floor, getBuildingOutlines, getBuildingMarkers, getBuilding } from "@/services/GISImporterService";
+import { floor } from "lodash";
+
+const googleMapsKey = GOOGLE_MAPS_API_KEY;
+
+const classroomImage = require("@/assets/images/marker.png");
+const exitImage = require("@/assets/images/exitMarker.png");
+const escalatorImage = require("@/assets/images/escalatorMarker.png");
+const elevatorImage = require("@/assets/images/elevatorMarker.png");
+const washroomImage = require("@/assets/images/washroomMarker.png");
+const markerImage = require("@/assets/images/marker.png");
+
 import {
   POI_MIN_ZOOM_LEVEL,
   POI_MAX_ZOOM_LEVEL,
@@ -37,18 +51,6 @@ import {
   hall8RoomsPois,
   hall8FloorPlan,
 } from "@/constants/MapExplorerScreen";
-
-import { Building, Floor, getBuildingOutlines, getBuildingMarkers, getBuilding } from "@/services/GISImporterService";
-import { floor } from "lodash";
-
-const googleMapsKey = GOOGLE_MAPS_API_KEY;
-
-const markerImage = require("@/assets/images/marker.png");
-
-const handleRoomPoiPress = (event: any) => {
-  console.log("Hall 9 room POI pressed:", event);
-};
-
 
 // Wrapper for the <MapView> component
 const MapComponent = ({
@@ -129,7 +131,33 @@ const MapComponent = ({
     }
   };
 
- 
+  const selectMarkerImage = (Code: string) => {
+    console.log("MARKER////////////////////");
+    if(Code.toLowerCase() == "class")
+    {
+      return classroomImage;
+    }
+    else if(Code.toLowerCase() == "entrance" || Code.toLowerCase() == "exit")
+    {
+      return exitImage;
+    }
+    else if(Code.toLowerCase() == "elevator" || Code.toLowerCase() == "elev")
+    {
+      return elevatorImage;
+    }
+    else if(Code.toLowerCase() == "escalator")
+    {
+      return escalatorImage;
+    }
+    else if(Code.toLowerCase().includes("washroom") || Code.toLowerCase().includes("bathroom"))
+    {
+      return washroomImage;
+    }
+    else
+    {
+      return markerImage;
+    }
+  }
 
   const handleMarkerPress = (markerData: any) => {
     const buildingID = markerData.properties.Building;
@@ -172,6 +200,21 @@ const MapComponent = ({
     }
   };
   
+  const handleRoomPoiPress = (markerData: any) => {
+    // Assuming markerData is the feature object
+    const coordinates = markerData.coordinates;
+
+    if (coordinates) {
+      const coordinate = { latitude: coordinates.latitude, longitude: coordinates.longitude };
+  
+      setSelectedCoordinate(coordinate);
+      setSelectedProperties(markerData.feature.properties
+        ? { ...markerData.feature.properties, coordinate }
+        : markerData);
+      setShowInfoBox(true);
+      setSelectedMarker(markerData);
+    }
+  };
 
   const handleDirections = (selectedProperties: any) => {
     if (!userLocation) {
@@ -195,6 +238,7 @@ const MapComponent = ({
         Address: destination.Address ?? destination.Building_Long_Name ?? "Selected Location",
         Latitude: destination.coordinate.latitude,
         Longitude: destination.coordinate.longitude,
+        ClassroomCode: selectedProperties.Code || ""
       };
       
     const originProps = origin === userLocation ?
@@ -211,6 +255,7 @@ const MapComponent = ({
       CommonActions.navigate({
         name: 'Directions',
         params: {
+          Properties: selectedProperties,
           origin: originProps,
           destination: destProps,
         },
@@ -314,22 +359,28 @@ const MapComponent = ({
           onPress={handleOutlinePress}
           tappable={true}
         />
-        {selectedBuilding && selectedFloor && zoomLevel > ZOOM_LEVEL_THRESHOLD && (
-          <Geojson
-            geojson={selectedFloor.roomPOIs}
-            image={markerImage}
-            strokeColor="red"
-            fillColor="rgba(255, 0, 0, 0.5)"
-            strokeWidth={2}
-            tappable={true}
-            onPress={handleRoomPoiPress}
-          />
-        )}
+        
+        {selectedBuilding && selectedFloor && zoomLevel > ZOOM_LEVEL_THRESHOLD &&
+          selectedFloor.roomPOIs.features.map((feature: any) => (
+            <Marker
+              coordinate={{
+                latitude: feature.geometry.coordinates[1],
+                longitude: feature.geometry.coordinates[0],
+              }}
+              title={feature.properties.Code ?? "POI"}
+              key={feature.properties.fid ?? Math.random().toString()}
+              image={selectMarkerImage(feature.properties.Type ?? "POI")}
+              pinColor="red"
+            onPress={() => {
+                handleMarkerPress(feature);
+              }}
+            />
+        ))}
         {selectedBuilding && selectedFloor && (
           <Geojson
             geojson={selectedFloor.plan}
-            strokeColor="orange"
-            fillColor="rgba(255, 165, 0, 0.5)"
+            strokeColor="#0085cc"
+            fillColor="#29b4ff"
             strokeWidth={2}
             tappable={true}
           />
