@@ -13,7 +13,6 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { DirectionsScreenStyles } from "@/Styles/MapStyles";
 import { GOOGLE_MAPS_API_KEY } from "@/constants/GoogleKey";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import SGW_CAMPUS from "./MapExplorerScreen";
 import "react-native-get-random-values";
 import { useRoute } from "@react-navigation/native";
 import { retrieveRoutes } from "@/services/DirectionService";
@@ -32,7 +31,10 @@ import {
   outdoorToIndoor 
 } from "@/services/IndoorDirService";
 
-// const googleMapsKey = GOOGLE_MAPS_API_KEY;
+import {
+  SGW_CAMPUS,
+} from "@/constants/MapsConstants";
+
 const BASE_PADDING = 50;
 
 export default function DirectionsScreen() {
@@ -197,7 +199,7 @@ export default function DirectionsScreen() {
           destination.latitude,
           destination.longitude,
           transportMode,
-          googleMapsKey
+          GOOGLE_MAPS_API_KEY
         );
         setDirectionsRoute(directions);
 

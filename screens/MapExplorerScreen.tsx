@@ -31,8 +31,21 @@ const googleMapsKey = GOOGLE_MAPS_API_KEY;
 
 const markerImage = require("@/assets/images/marker.png");
 
-const ZOOM_LEVEL_THRESHOLD = 19;
-const BUILDING_MARKERS_ZOOM_THRESHOLD = 18;
+import {
+  POI_MIN_ZOOM_LEVEL,
+  POI_MAX_ZOOM_LEVEL,
+  POI_RADIUS_MIN,
+  POI_RADIUS_MAX,
+  POI_ZOOM_REFRESH_THRESHOLD,
+  ZOOM_LEVEL_THRESHOLD,
+  BUILDING_MARKERS_ZOOM_THRESHOLD,
+  buildingMarkers,
+  buildingOutlines,
+  hall9RoomsPois,
+  hall9FloorPlan,
+  hall8RoomsPois,
+  hall8FloorPlan,
+} from "@/constants/MapExplorerScreen";
 
 // Wrapper for the <MapView> component
 const MapComponent = ({
