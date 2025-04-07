@@ -29,6 +29,11 @@ import { floor } from "lodash";
 
 const googleMapsKey = GOOGLE_MAPS_API_KEY;
 
+const classroomImage = require("@/assets/images/marker.png");
+const exitImage = require("@/assets/images/exitMarker.png");
+const escalatorImage = require("@/assets/images/escalatorMarker.png");
+const elevatorImage = require("@/assets/images/elevatorMarker.png");
+const washroomImage = require("@/assets/images/washroomMarker.png");
 const markerImage = require("@/assets/images/marker.png");
 
 import {
@@ -126,7 +131,33 @@ const MapComponent = ({
     }
   };
 
- 
+  const selectMarkerImage = (Code: string) => {
+    console.log("MARKER////////////////////");
+    if(Code.toLowerCase() == "class")
+    {
+      return classroomImage;
+    }
+    else if(Code.toLowerCase() == "entrance" || Code.toLowerCase() == "exit")
+    {
+      return exitImage;
+    }
+    else if(Code.toLowerCase() == "elevator" || Code.toLowerCase() == "elev")
+    {
+      return elevatorImage;
+    }
+    else if(Code.toLowerCase() == "escalator")
+    {
+      return escalatorImage;
+    }
+    else if(Code.toLowerCase().includes("washroom") || Code.toLowerCase().includes("bathroom"))
+    {
+      return washroomImage;
+    }
+    else
+    {
+      return markerImage;
+    }
+  }
 
   const handleMarkerPress = (markerData: any) => {
     const buildingID = markerData.properties.Building;
@@ -328,17 +359,23 @@ const MapComponent = ({
           onPress={handleOutlinePress}
           tappable={true}
         />
-        {selectedBuilding && selectedFloor && zoomLevel > ZOOM_LEVEL_THRESHOLD && (
-          <Geojson
-            geojson={selectedFloor.roomPOIs}
-            image={markerImage}
-            strokeColor="red"
-            fillColor="rgba(255, 0, 0, 0.5)"
-            strokeWidth={2}
-            tappable={true}
-            onPress={(data: any) => {handleRoomPoiPress(data);}}
-          />
-        )}
+        
+        {selectedBuilding && selectedFloor && zoomLevel > ZOOM_LEVEL_THRESHOLD &&
+          selectedFloor.roomPOIs.features.map((feature: any) => (
+            <Marker
+              coordinate={{
+                latitude: feature.geometry.coordinates[1],
+                longitude: feature.geometry.coordinates[0],
+              }}
+              title={feature.properties.Code ?? "POI"}
+              key={feature.properties.fid ?? Math.random().toString()}
+              image={selectMarkerImage(feature.properties.Type ?? "POI")}
+              pinColor="red"
+            onPress={() => {
+                handleMarkerPress(feature);
+              }}
+            />
+        ))}
         {selectedBuilding && selectedFloor && (
           <Geojson
             geojson={selectedFloor.plan}
